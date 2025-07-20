@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+  background-color: #f4f4f4;
+}
+
+header, footer {
+  text-align: center;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: navy;
+}
