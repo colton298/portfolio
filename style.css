@@ -23,8 +23,34 @@ details {
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+
 summary {
-  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
   font-weight: bold;
-  color: navy;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s ease;
 }
+
+summary:hover {
+  background-color: #45a049;
+}
+
+
+summary::before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(2px);
+  transition: transform 0.2s ease;
+}
+
+details[open] summary::before {
+  content: "▼";
+}
+
