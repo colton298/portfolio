@@ -40,6 +40,10 @@ summary:hover {
   background-color: #45a049;
 }
 
+summary::-webkit-details-marker {
+  display: none;
+}
+
 
 summary::before {
   content: "▶";
@@ -54,3 +58,20 @@ details[open] summary::before {
   content: "▼";
 }
 
+.preview-button {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: navy;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  border: none;
+  user-select: none;
+}
+
+.preview-button:hover {
+  background-color: #003366;
+}
