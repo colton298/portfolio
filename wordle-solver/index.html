@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wordle Solver</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Wordle Solver</h1>
 
   <form id="solverForm" disabled>
-    <label>Known Letters (Green, use "_" for unknown):</label>
-    <input type="text" id="green" maxlength="5" placeholder="_a__e" required>
+    <label>Correct Positions (Green):</label>
+    <div class="letter-row" id="greenRow">
+      <input class="green" maxlength="1" />
+      <input class="green" maxlength="1" />
+      <input class="green" maxlength="1" />
+      <input class="green" maxlength="1" />
+      <input class="green" maxlength="1" />
+    </div>
 
-    <label>Wrong Positions (Yellow, format: a1,b3):</label>
-    <input type="text" id="yellow" placeholder="e1,r2">
+    <label>Wrong Positions (Yellow):</label>
+    <div class="letter-row" id="yellowRow">
+      <input class="yellow" maxlength="1" />
+      <input class="yellow" maxlength="1" />
+      <input class="yellow" maxlength="1" />
+      <input class="yellow" maxlength="1" />
+      <input class="yellow" maxlength="1" />
+    </div>
 
     <label>Exclude Letters (Gray):</label>
-    <input type="text" id="gray" placeholder="txyz">
+    <input type="text" id="gray" placeholder="txyz" />
 
     <button type="submit">Find Words</button>
   </form>
