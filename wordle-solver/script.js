@@ -44,16 +44,18 @@ document.getElementById("solverForm").addEventListener("submit", async function 
 
   const loading = document.getElementById("loading");
   const list = document.getElementById("results");
-  loading.style.display = "block";
-  list.innerHTML = ""; // Clear previous results
 
-  // Delay filtering slightly to show animation
-  await new Promise(r => setTimeout(r, 100)); 
+  // Show spinner and clear old results
+  loading.style.display = "block";
+  list.innerHTML = "";
+
+  // Small delay to allow spinner to render
+  await new Promise((r) => setTimeout(r, 100));
 
   const green = getGreenPattern();
   const yellow = getYellowMap();
   const gray = document.getElementById("gray").value.toLowerCase();
-  const graySet = new Set(gray.split('').filter(l => l));
+  const graySet = new Set(gray.split('').filter(Boolean));
 
   const greenLetters = new Set(green.split('').filter(l => l !== "_"));
   const yellowLetters = new Set(Object.keys(yellow));
@@ -63,6 +65,7 @@ document.getElementById("solverForm").addEventListener("submit", async function 
   for (const word of WORDS) {
     let match = true;
 
+    // Green letter match
     for (let i = 0; i < 5; i++) {
       if (green[i] !== "_" && green[i] !== word[i]) {
         match = false;
@@ -72,6 +75,7 @@ document.getElementById("solverForm").addEventListener("submit", async function 
 
     if (!match) continue;
 
+    // Yellow letter match
     for (const [letter, indices] of Object.entries(yellow)) {
       if (!word.includes(letter)) {
         match = false;
@@ -87,6 +91,7 @@ document.getElementById("solverForm").addEventListener("submit", async function 
 
     if (!match) continue;
 
+    // Gray letter exclusion
     for (const l of graySet) {
       if (word.includes(l) && !greenLetters.has(l) && !yellowLetters.has(l)) {
         match = false;
@@ -97,15 +102,14 @@ document.getElementById("solverForm").addEventListener("submit", async function 
     if (match) results.push(word);
   }
 
-  // Delay finished animation slightly to improve feel
-  await new Promise(r => setTimeout(r, 200)); 
+  // Keep loading visible for a minimum time
+  await new Promise((r) => setTimeout(r, 300));
   loading.style.display = "none";
 
   list.innerHTML = results.length
-    ? results.map(word => `<li>${word}</li>`).join('')
+    ? results.map(w => `<li>${w}</li>`).join("")
     : "<li>No matches found</li>";
 });
-
 
 function setupAutoAdvance(selector) {
   const boxes = document.querySelectorAll(selector);
