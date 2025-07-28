@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordle Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Wordle Solver</h1>
+
+  <form id="solverForm">
+    <label>Known Letters (Green, use "_" for unknown):</label>
+    <input type="text" id="green" maxlength="5" placeholder="_a__e" required>
+
+    <label>Wrong Positions (Yellow, format: a1,b3):</label>
+    <input type="text" id="yellow" placeholder="e1,r2">
+
+    <label>Exclude Letters (Gray):</label>
+    <input type="text" id="gray" placeholder="txyz">
+
+    <button type="submit">Find Words</button>
+  </form>
+
+  <h2>Possible Matches</h2>
+  <ul id="results"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
