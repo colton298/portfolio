@@ -1,8 +1,20 @@
 body {
   font-family: Arial, sans-serif;
-  padding: 20px;
   background-color: #121212;
   color: #eee;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.solver-container {
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
 }
 
 h1, h2 {
@@ -23,6 +35,10 @@ input, button {
   color: #fff;
   border: 1px solid #555;
   border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 button {
@@ -37,6 +53,7 @@ button:hover {
 
 .letter-row {
   display: flex;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 10px;
 }
@@ -46,6 +63,7 @@ button:hover {
   text-align: center;
   font-size: 18px;
 }
+
 #loading {
   margin-top: 20px;
   text-align: center;
@@ -67,32 +85,17 @@ button:hover {
   }
 }
 
-header {
-  background-color: #1e1e1e;
-  color: #90ee90;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #444;
-  margin-bottom: 20px;
+footer {
+  margin-top: 30px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 28px;
-}
-
-nav {
-  margin-top: 10px;
-}
-
-nav a {
-  margin: 0 15px;
+.back-link {
   color: #90ee90;
   text-decoration: none;
-  font-weight: bold;
+  font-size: 16px;
 }
 
-nav a:hover {
+.back-link:hover {
   text-decoration: underline;
   color: #c1ffc1;
 }
