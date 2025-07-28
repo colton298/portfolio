@@ -107,8 +107,9 @@ document.getElementById("solverForm").addEventListener("submit", async function 
   loading.style.display = "none";
 
   list.innerHTML = results.length
-    ? results.map(w => `<li>${w}</li>`).join("")
-    : "<li>No matches found</li>";
+  ? results.join(", ")
+  : "No matches found.";
+
 });
 
 function setupAutoAdvance(selector) {
