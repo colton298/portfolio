@@ -34,13 +34,21 @@ function getYellowMap() {
   return yellow;
 }
 
-document.getElementById("solverForm").addEventListener("submit", function (e) {
+document.getElementById("solverForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   if (WORDS.length === 0) {
     alert("Word list not loaded yet. Please try again in a moment.");
     return;
   }
+
+  const loading = document.getElementById("loading");
+  const list = document.getElementById("results");
+  loading.style.display = "block";
+  list.innerHTML = ""; // Clear previous results
+
+  // Delay filtering slightly to show animation
+  await new Promise(r => setTimeout(r, 100)); 
 
   const green = getGreenPattern();
   const yellow = getYellowMap();
@@ -55,7 +63,6 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
   for (const word of WORDS) {
     let match = true;
 
-    // Green letters
     for (let i = 0; i < 5; i++) {
       if (green[i] !== "_" && green[i] !== word[i]) {
         match = false;
@@ -65,7 +72,6 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
 
     if (!match) continue;
 
-    // Yellow letters
     for (const [letter, indices] of Object.entries(yellow)) {
       if (!word.includes(letter)) {
         match = false;
@@ -81,7 +87,6 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
 
     if (!match) continue;
 
-    // Gray letters
     for (const l of graySet) {
       if (word.includes(l) && !greenLetters.has(l) && !yellowLetters.has(l)) {
         match = false;
@@ -92,11 +97,15 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
     if (match) results.push(word);
   }
 
-  const list = document.getElementById("results");
+  // Delay finished animation slightly to improve feel
+  await new Promise(r => setTimeout(r, 200)); 
+  loading.style.display = "none";
+
   list.innerHTML = results.length
     ? results.map(word => `<li>${word}</li>`).join('')
     : "<li>No matches found</li>";
 });
+
 
 function setupAutoAdvance(selector) {
   const boxes = document.querySelectorAll(selector);
