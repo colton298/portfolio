@@ -3,12 +3,16 @@ let WORDS = [];
 fetch("words.txt")
   .then(response => response.text())
   .then(text => {
-    WORDS = text.split("\n").map(word => word.trim().toLowerCase()).filter(w => w.length === 5);
+    WORDS = text
+      .replace(/\r/g, '') // remove Windows-style carriage returns
+      .split("\n")
+      .map(word => word.trim().toLowerCase())
+      .filter(w => w.length === 5);
+    document.getElementById("solverForm").disabled = false;
   })
   .catch(err => {
     console.error("Failed to load word list:", err);
   });
-
 
 function parseYellow(input) {
   const result = {};
@@ -26,12 +30,18 @@ function parseYellow(input) {
 document.getElementById("solverForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
+  if (WORDS.length === 0) {
+    alert("Word list not loaded yet. Please try again in a moment.");
+    return;
+  }
+
   const green = document.getElementById("green").value.toLowerCase();
   const yellowRaw = document.getElementById("yellow").value;
   const gray = document.getElementById("gray").value.toLowerCase();
 
   const yellow = parseYellow(yellowRaw);
-  const graySet = new Set(gray.split(''));
+  const graySet = new Set(gray.split('').filter(l => l));
+
   const results = [];
 
   for (const word of WORDS) {
@@ -44,6 +54,8 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
         break;
       }
     }
+
+    if (!match) continue;
 
     // Yellow match
     for (const [letter, indices] of Object.entries(yellow)) {
@@ -59,9 +71,13 @@ document.getElementById("solverForm").addEventListener("submit", function (e) {
       }
     }
 
-    // Gray letters
+    if (!match) continue;
+
+    // Gray letters (exclude only if not in green/yellow context)
+    const greenLetters = new Set(green.split('').filter(l => l !== "_"));
+    const yellowLetters = new Set(Object.keys(yellow));
     for (const l of graySet) {
-      if (word.includes(l)) {
+      if ((word.includes(l)) && !greenLetters.has(l) && !yellowLetters.has(l)) {
         match = false;
         break;
       }
