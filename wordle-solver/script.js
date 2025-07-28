@@ -1,8 +1,14 @@
-// A small example word list. Replace this with a larger dictionary if you want.
-const WORDS = [
-  "apple", "angle", "alert", "alien", "arena",
-  "agree", "argue", "arise", "adore", "alike"
-];
+let WORDS = [];
+
+fetch("words.txt")
+  .then(response => response.text())
+  .then(text => {
+    WORDS = text.split("\n").map(word => word.trim().toLowerCase()).filter(w => w.length === 5);
+  })
+  .catch(err => {
+    console.error("Failed to load word list:", err);
+  });
+
 
 function parseYellow(input) {
   const result = {};
