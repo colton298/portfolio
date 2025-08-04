@@ -40,22 +40,29 @@ const todoSection = document.getElementById("todo-section");
 const todoList = document.getElementById("todo-list");
 const authError = document.getElementById("auth-error");
 
-// 🔐 Signup and send verification email
 window.signup = async function () {
   clearError();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
+
+    // ✅ Send email verification
     await result.user.sendEmailVerification();
 
+    // ✅ Show success message + resend button
     authError.style.color = "#90caf9";
-    authError.textContent = "Verification email sent. Please check your inbox.";
+    authError.innerHTML = `
+      Verification email sent. Please check your inbox.<br>
+      <button onclick="resendVerification()">Resend Verification Email</button>
+    `;
+
     await signOut(auth); // logout until verified
   } catch (error) {
     showError(error);
   }
 };
+
 
 // 🔐 Login (blocks unverified users)
 window.login = async function () {
@@ -74,23 +81,32 @@ window.logout = async function () {
   await signOut(auth);
 };
 
-// 📩 Resend email verification
 window.resendVerification = async function () {
   clearError();
-  const user = auth.currentUser;
-  if (user && !user.emailVerified) {
-    try {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    // Log back in to get fresh user object
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    const user = result.user;
+
+    if (!user.emailVerified) {
       await user.sendEmailVerification();
       authError.style.color = "#90caf9";
-      authError.textContent = "Verification email re-sent.";
-    } catch (error) {
-      showError(error);
+      authError.textContent = "Verification email re-sent. Check your inbox.";
+    } else {
+      authError.style.color = "#90caf9";
+      authError.textContent = "Your email is already verified.";
     }
-  } else {
-    authError.style.color = "#f88";
-    authError.textContent = "Please login first with an unverified account.";
+
+    await signOut(auth);
+  } catch (error) {
+    showError(error);
   }
 };
+
 
 // 👁️ Auth state listener
 onAuthStateChanged(auth, (user) => {
