@@ -5,25 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>To-Do List</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .centered {
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      background-color: #1f1f1f;
+      border-radius: 12px;
+      text-align: center;
+    }
+    input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      border: none;
+      background-color: #2c2c2c;
+      color: #fff;
+    }
+    button {
+      margin: 0.5rem;
+      padding: 10px 16px;
+      background-color: #333;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background-color: #2a2a2a;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #auth-error {
+      color: #f88;
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+    }
+  </style>
 </head>
 <body>
-  <h1>To-Do List</h1>
 
-  <div id="auth-section">
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Sign Up</button>
-    <button onclick="logout()">Logout</button>
-  </div>
+  <header>
+    <h1>To-Do List</h1>
+    <nav>
+      <a href="index.html#about">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="resume.html">Resume</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
-  <div id="todo-section" style="display:none;">
-    <form onsubmit="addTodo(event)">
-      <input id="todo-input" placeholder="New to-do">
-      <button type="submit">Add</button>
-    </form>
-    <ul id="todo-list"></ul>
-  </div>
+  <section class="centered">
+    <div id="auth-section">
+      <h2>Login or Sign Up</h2>
+      <input id="email" type="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password (min 6 chars)">
+      <div id="auth-error"></div>
+      <button onclick="login()">Login</button>
+      <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <div id="todo-section" style="display:none;">
+      <form onsubmit="addTodo(event)">
+        <input id="todo-input" placeholder="New to-do">
+        <button type="submit">Add</button>
+      </form>
+      <ul id="todo-list"></ul>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </section>
 
   <script type="module" src="todo.js"></script>
 </body>

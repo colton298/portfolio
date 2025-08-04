@@ -1,5 +1,8 @@
+//todo.js
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
+import 
+{
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,7 +10,8 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
+import 
+{
   getFirestore,
   collection,
   addDoc,
@@ -19,7 +23,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 //API key is just to identify, not to login
-  const firebaseConfig = {
+  const firebaseConfig = 
+  {
     apiKey: "AIzaSyCde4UcG0xkdPTP2SmGiqUib2jRodUbEMk",
     authDomain: "to-do-list-50f68.firebaseapp.com",
     projectId: "to-do-list-50f68",
@@ -29,47 +34,46 @@ import {
     measurementId: "G-04JTG08FEX"
   };
 
-// Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// HTML elements
 const authSection = document.getElementById("auth-section");
 const todoSection = document.getElementById("todo-section");
 const todoList = document.getElementById("todo-list");
+const authError = document.getElementById("auth-error");
 
-// 🔐 Signup
-window.signup = async function () {
+//Signup
+window.signup = async function () 
+{
+  clearError();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    alert("Signup successful!");
   } catch (error) {
-    alert("Signup error: " + error.message);
+    showError(error);
   }
 };
 
-// 🔐 Login
+//Login
 window.login = async function () {
+  clearError();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    alert("Login successful!");
   } catch (error) {
-    alert("Login error: " + error.message);
+    showError(error);
   }
 };
 
-// 🔐 Logout
+//Logout
 window.logout = async function () {
   await signOut(auth);
-  alert("Logged out");
 };
 
-// 🔄 Auth state listener
+//Auth State Listener
 onAuthStateChanged(auth, (user) => {
   if (user) {
     authSection.style.display = "none";
@@ -82,7 +86,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ➕ Add new to-do
+//Add To-Do
 window.addTodo = async function (event) {
   event.preventDefault();
   const input = document.getElementById("todo-input");
@@ -102,12 +106,12 @@ window.addTodo = async function (event) {
   }
 };
 
-// 📥 Load todos for user
+//Load To-Dos
 async function loadTodos(user) {
   const q = query(collection(db, "todos"), where("userId", "==", user.uid));
   const snapshot = await getDocs(q);
 
-  todoList.innerHTML = ""; // clear list
+  todoList.innerHTML = "";
   snapshot.forEach((docSnap) => {
     const li = document.createElement("li");
     li.textContent = docSnap.data().text;
@@ -122,4 +126,28 @@ async function loadTodos(user) {
     li.appendChild(delBtn);
     todoList.appendChild(li);
   });
+}
+
+//Error Helpers
+function showError(error) {
+  authError.textContent = mapAuthError(error);
+}
+function clearError() {
+  authError.textContent = "";
+}
+function mapAuthError(error) {
+  if (!error || !error.code) return "An unknown error occurred.";
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      return "This email is already registered.";
+    case "auth/invalid-email":
+      return "Please enter a valid email address.";
+    case "auth/weak-password":
+      return "Password must be at least 6 characters.";
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+      return "Invalid email or password.";
+    default:
+      return error.message;
+  }
 }
