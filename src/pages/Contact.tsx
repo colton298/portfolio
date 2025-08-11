@@ -1,4 +1,8 @@
+import { useEffect } from "react";
 export default function Contact() {
+  useEffect(() => {
+      document.title = "Colton Santiago | Contact";
+    }, []);
   return (
     <section className="contact">
       <h1>Contact Me</h1>

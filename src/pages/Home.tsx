@@ -1,6 +1,10 @@
 import headshot from "../assets/IMG_0650.jpeg";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    document.title = "Colton Santiago | Home";
+  }, []);
   return (
     <div style={{ textAlign: "center", maxWidth: "800px" }}>
       <img

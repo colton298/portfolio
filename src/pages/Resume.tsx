@@ -1,4 +1,8 @@
+import { useEffect } from "react";
 export default function Resume() {
+  useEffect(() => {
+      document.title = "Colton Santiago | Resume";
+    }, []);
   const pdfUrl = `${import.meta.env.BASE_URL}Resume.pdf`;
 
   return (

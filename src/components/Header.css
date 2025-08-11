@@ -1,0 +1,135 @@
+/* --- Shell --- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 13, 18, 0.8);
+  backdrop-filter: saturate(120%) blur(6px);
+  border-bottom: 1px solid #1a1f2b;
+}
+
+/* Full-bleed inner bar */
+.header-inner {
+  position: relative;               /* <-- allows absolute centering of nav */
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* brand | spacer | hamburger */
+  align-items: center;
+  padding: 0.75rem 16px 0.75rem 0;   /* left=0 so brand touches the window edge */
+  gap: 8px;
+}
+
+/* Brand (flush left with tiny cushion) */
+.site-title { justify-self: start; }
+.brand-link {
+  display: inline-block;
+  padding-left: 16px;
+  color: #e6e8ee;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* Centered nav — absolute so it's really centered no matter what */
+.site-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: clamp(12px, 2.2vw, 28px);
+}
+.nav-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  transition: color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+.nav-link:hover { color: #fff; background: #111625; transform: translateY(-1px); }
+.nav-link.active { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 6px; }
+
+/* Hamburger (right side) */
+.hamburger {
+  justify-self: end;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  width: 40px; height: 32px;
+  display: none;                    /* <-- hidden by default (desktop) */
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: #e6e8ee;
+  margin: 6px 0;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+/* Desktop: hamburger hidden, mobile menu hidden */
+.hamburger { display: none; }
+
+/* Mobile breakpoint */
+@media (max-width: 720px) {
+  .site-nav { display: none; }        /* hide desktop nav on mobile */
+  .hamburger { display: inline-block; }
+
+  /* Hidden by default */
+  .mobile-menu {
+    display: none;                    /* <-- key line: never render unless open */
+    position: fixed;
+    inset: 0;
+    background: rgba(11,13,18,0.95);
+    z-index: 1000;
+    place-items: center;              /* grid centering when shown */
+  }
+  /* Only visible when state adds .open */
+  .mobile-menu.open {
+    display: grid;
+  }
+  .mobile-menu-content {
+    display: grid;
+    gap: 16px;
+    text-align: center;
+  }
+  .mobile-link {
+    color: #e6e8ee;
+    text-decoration: none;
+    font-size: 1.25rem;
+  }
+  .mobile-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+}
+/* ---- FINAL mobile menu visibility rules ---- */
+
+/* Desktop (default): hamburger hidden, mobile menu hidden */
+.site-header .mobile-menu { display: none !important; }
+.hamburger { display: none; }
+
+/* Mobile breakpoint only */
+@media (max-width: 720px) {
+  .site-nav { display: none; }        /* hide centered desktop nav */
+  .hamburger { display: inline-block; }
+
+  .site-header .mobile-menu {
+    display: none !important;         /* still hidden until opened */
+    position: fixed;
+    inset: 0;
+    background: rgba(11,13,18,0.95);
+    z-index: 1000;
+    place-items: center;
+  }
+  .site-header .mobile-menu.open {
+    display: grid !important;         /* show only when state adds .open */
+  }
+
+  .mobile-menu-content {
+    display: grid;
+    gap: 16px;
+    text-align: center;
+  }
+  .mobile-link {
+    color: #e6e8ee;
+    text-decoration: none;
+    font-size: 1.25rem;
+  }
+  .mobile-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+}
