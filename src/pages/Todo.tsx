@@ -11,7 +11,7 @@ import {
 } from "../services/todos";
 import DayTimeline from "../components/DayTimeline";
 
-/* ---------- helpers ---------- */
+/* ---------------------- helpers ---------------------- */
 function toISODate(d: Date) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -29,7 +29,11 @@ function formatDatePretty(iso?: string | null) {
   if (!iso) return "";
   const [y, m, d] = iso.split("-").map(Number);
   const dt = new Date(y, (m ?? 1) - 1, d ?? 1);
-  return dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  return dt.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 }
 function formatTime(hhmm?: string | null) {
   if (!hhmm) return "";
@@ -42,21 +46,21 @@ function formatRange(start?: string | null, end?: string | null) {
   if (!start) return "";
   const s = formatTime(start);
   if (!end) return s;
-  const e = formatTime(end);
-  return `${s}–${e}`;
+  return `${s}–${formatTime(end)}`;
 }
-function cmpTime(a: string | null | undefined, b: string | null | undefined) {
+function cmpTime(a?: string | null, b?: string | null) {
   const aa = a ?? "99:99";
   const bb = b ?? "99:99";
   return aa.localeCompare(bb);
 }
 function daySort(a: Todo, b: Todo) {
+  // dated first
   const aHasDate = !!a.date;
   const bHasDate = !!b.date;
   if (aHasDate && !bHasDate) return -1;
   if (!aHasDate && bHasDate) return 1;
 
-  // primary: start time
+  // primary: start time (supports legacy single `time`)
   const t1 = (a as any).timeStart ?? (a as any).time ?? null;
   const t2 = (b as any).timeStart ?? (b as any).time ?? null;
   const tcmp = cmpTime(t1, t2);
@@ -75,12 +79,15 @@ function daySort(a: Todo, b: Todo) {
 }
 function isValidRange(start?: string, end?: string) {
   if (!start || !end) return true;
-  return start <= end; // "HH:MM" strings compare lexicographically fine
+  return start < end;
 }
+
+/* ===================================================== */
 
 export default function TodoPage() {
   const { user } = useAuth();
   const uid = user?.uid!;
+
   const [todos, setTodos] = useState<Todo[]>([]);
 
   // --- Add form state
@@ -102,15 +109,11 @@ export default function TodoPage() {
   const [editingStart, setEditingStart] = useState<string>("");
   const [editingEnd, setEditingEnd] = useState<string>("");
 
-  useEffect(() => {
-    console.log("[TodoPage] mounted"); // DEBUG #D1 (component mount)
-  }, []);
-
+  // Live subscribe and normalize time fields for UI
   useEffect(() => {
     if (!uid) return;
     const stop = watchTodos(uid, (list) => {
-      // ensure timeStart/timeEnd exist for UI
-      const normalized = list.map(t => ({
+      const normalized = list.map((t) => ({
         ...t,
         timeStart: (t as any).timeStart ?? (t as any).time ?? null,
         timeEnd: (t as any).timeEnd ?? null,
@@ -120,17 +123,20 @@ export default function TodoPage() {
     return stop;
   }, [uid]);
 
+  // current day's tasks (undated always visible)
   const dayTodos = useMemo(
-    () => todos.filter(t => (t.date ? t.date === viewDate : true)).sort(daySort),
+    () => todos.filter((t) => (t.date ? t.date === viewDate : true)).sort(daySort),
     [todos, viewDate]
   );
 
+  // filters
   const filtered = useMemo(() => {
-    if (filter === "active") return dayTodos.filter(t => !t.done);
-    if (filter === "done") return dayTodos.filter(t => t.done);
+    if (filter === "active") return dayTodos.filter((t) => !t.done);
+    if (filter === "done") return dayTodos.filter((t) => t.done);
     return dayTodos;
   }, [dayTodos, filter]);
 
+  // add
   const add = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = newText.trim();
@@ -141,7 +147,7 @@ export default function TodoPage() {
       return;
     }
 
-    console.log("[TodoPage] add submit", { textLen: text.length, newMode, newStart, newEnd }); // DEBUG
+    console.log("[TodoPage] add submit", { textLen: text.length, newMode, newStart, newEnd }); // DEBUG (Todo.tsx line ~140)
 
     await createTodo(uid, text, {
       date: newDate || null,
@@ -156,8 +162,9 @@ export default function TodoPage() {
     setNewMode("single");
   };
 
+  // edit
   const beginEdit = (t: Todo) => {
-    console.log("[TodoPage] begin edit:", t.id); // DEBUG
+    console.log("[TodoPage] begin edit:", t.id); // DEBUG (inside beginEdit)
     setEditingId(t.id!);
     setEditingText(t.text);
     setEditingDate(t.date || "");
@@ -186,12 +193,22 @@ export default function TodoPage() {
         timeEnd: editingMode === "range" ? (editingEnd || null) : null,
       });
     }
-    setEditingId(null); setEditingText(""); setEditingDate(""); setEditingStart(""); setEditingEnd(""); setEditingMode("single");
+    setEditingId(null);
+    setEditingText("");
+    setEditingDate("");
+    setEditingStart("");
+    setEditingEnd("");
+    setEditingMode("single");
   };
 
   const cancelEdit = () => {
     console.log("[TodoPage] cancel edit"); // DEBUG
-    setEditingId(null); setEditingText(""); setEditingDate(""); setEditingStart(""); setEditingEnd(""); setEditingMode("single");
+    setEditingId(null);
+    setEditingText("");
+    setEditingDate("");
+    setEditingStart("");
+    setEditingEnd("");
+    setEditingMode("single");
   };
 
   return (
@@ -204,6 +221,28 @@ export default function TodoPage() {
         />
       </Helmet>
 
+      {/* -------- Full‑width timeline ABOVE the two panels -------- */}
+      <div className="panel" style={{ marginBottom: "1rem" }}>
+        <h3>Schedule for {formatDatePretty(viewDate)}</h3>
+
+        {/* The SVG timeline is sized/styled via CSS (.timeline-svg).
+            No component props needed, just feed items. */}
+        <div className="timeline">
+          <DayTimeline
+            items={dayTodos.map((t) => ({
+              id: t.id!,
+              text: t.text,
+              done: t.done,
+              // support both range and single time (legacy)
+              time: (t as any).time ?? null,
+              start: (t as any).timeStart ?? null,
+              end: (t as any).timeEnd ?? null,
+            }))}
+          />
+        </div>
+      </div>
+
+      {/* ----------------- two-column content below ----------------- */}
       <section className="todo-split">
         {/* Left: Add new */}
         <div className="panel">
@@ -262,7 +301,7 @@ export default function TodoPage() {
             </div>
 
             <button className="button" type="submit">Add</button>
-            <p className="muted" style={{marginTop:".5rem"}}>
+            <p className="muted" style={{ marginTop: ".5rem" }}>
               Tip: leave date/time blank if this task isn’t tied to a specific schedule.
             </p>
           </form>
@@ -310,24 +349,11 @@ export default function TodoPage() {
             </div>
           </div>
 
-          {/* Centered timeline + live updates on edit */}
-          <div className="timeline">
-            <DayTimeline
-              items={dayTodos.map(t => ({
-                id: t.id!,
-                text: t.text,
-                done: t.done,
-                time: t.time ?? null,               // single time (legacy/optional)
-                start: (t as any).timeStart ?? null,
-                end: (t as any).timeEnd ?? null,
-              }))}
-            />
-          </div>
-
           <ul className="todo-list">
             {filtered.map((t) => {
               const start = (t as any).timeStart ?? (t as any).time ?? null;
               const end = (t as any).timeEnd ?? null;
+
               return (
                 <li key={t.id} className={`todo-item ${t.done ? "done" : ""}`}>
                   <input
@@ -349,7 +375,6 @@ export default function TodoPage() {
                         }}
                         placeholder="Task"
                       />
-
                       <div className="edit-row">
                         <input
                           type="date"
@@ -358,9 +383,6 @@ export default function TodoPage() {
                           onChange={(e) => setEditingDate(e.target.value)}
                           className="select date-input"
                         />
-                      </div>
-
-                      <div className="edit-row" style={{ gap: ".5rem", alignItems: "center" }}>
                         <select
                           aria-label="Time mode"
                           className="select"
@@ -371,7 +393,6 @@ export default function TodoPage() {
                           <option value="single">At time</option>
                           <option value="range">Time range</option>
                         </select>
-
                         <input
                           type="time"
                           aria-label={editingMode === "range" ? "Start time (optional)" : "Time (optional)"}
@@ -379,7 +400,6 @@ export default function TodoPage() {
                           onChange={(e) => setEditingStart(e.target.value)}
                           className="select time-input"
                         />
-
                         {editingMode === "range" && (
                           <input
                             type="time"
@@ -390,7 +410,6 @@ export default function TodoPage() {
                           />
                         )}
                       </div>
-
                       <div className="row-actions">
                         <button className="button" onClick={saveEdit}>Save</button>
                         <button className="button outline" onClick={cancelEdit}>Cancel</button>
@@ -406,7 +425,11 @@ export default function TodoPage() {
                         {(start || end) && (
                           <span className="chip small">{formatRange(start, end)}</span>
                         )}
-                        {!t.date && <span className="chip small" title="This task has no date">Undated</span>}
+                        {!t.date && (
+                          <span className="chip small" title="This task has no date">
+                            Undated
+                          </span>
+                        )}
                       </div>
 
                       <div className="row-actions">

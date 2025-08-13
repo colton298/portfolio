@@ -301,6 +301,30 @@ input:focus, select:focus, textarea:focus {
 .edit-col { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
 .edit-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
+/* ==========================================================================
+   Timeline (dark, responsive, fills its box)
+   ========================================================================== */
+
+.timeline { margin-top: 0.75rem; }
+
+/* The container defines the height; the SVG will stretch to fill it */
+.timeline-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 0.5rem;
+  height: var(--timeline-h, 340px); /* tweak this to taste */
+}
+
+/* SVG fills the parent dimensions exactly */
+.timeline-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+
 
 /* ==========================================================================
    Legacy / Compatibility
@@ -308,3 +332,40 @@ input:focus, select:focus, textarea:focus {
 
 .form-row-inline { display: flex; align-items: center; gap: .5rem; margin: .25rem 0 .5rem; }
 .form-row-between { display: flex; justify-content: space-between; align-items: center; }
+
+/* Apply Noto Sans to the entire site */
+html, body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* If you want it to override all element fonts */
+* {
+  font-family: inherit;
+}
+
+/* Date/Time pickers: force light icons + dark UI */
+input[type="date"],
+input[type="time"],
+.date-input,
+.time-input {
+  color-scheme: dark;                 /* Firefox/Safari hint */
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid #2a2a2a;
+}
+
+/* Chromium/WebKit icon */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+.date-input::-webkit-calendar-picker-indicator,
+.time-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.15); /* make icon white */
+  opacity: 1;
+}
+
+/* Remove default background on the icon hit-area in some WebKit builds */
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit {
+  color: var(--text);
+  background: transparent;
+}

@@ -1,195 +1,177 @@
-import React, { useMemo } from "react";
-import "./day-timeline.css";
+import React from "react";
 
-type TimelineItem = {
+/**
+ * DayTimeline (dark, responsive, box-filling)
+ * - Fills its parent box (SVG width/height = 100%).
+ * - Time ranges = rounded bars. Single times = triangle pins.
+ * - End label now shows 12a (not 12p) at midnight.
+ *
+ * Props:
+ *   items: { id: string; text: string; done?: boolean;
+ *            time?: string|null; start?: string|null; end?: string|null }[]
+ */
+type Item = {
   id: string;
   text: string;
   done?: boolean;
-  // One of:
-  time?: string | null;        // e.g., "14:30"  (milestone)
-  start?: string | null;       // e.g., "09:00"  (time range)
-  end?: string | null;         // e.g., "10:45"
+  time?: string | null;
+  start?: string | null;
+  end?: string | null;
 };
 
-type Props = {
-  items: TimelineItem[];
-  // Optional: show hour grid (default true)
-  showGrid?: boolean;
-};
+type Props = { items: Item[] };
 
-const DAY_MIN = 24 * 60;
+const DAY_MIN = 0;
+const DAY_MAX = 24 * 60;
 
-function toMinutes(hhmm?: string | null) {
+function toMin(hhmm: string | null | undefined): number | null {
   if (!hhmm) return null;
   const [h, m] = hhmm.split(":").map(Number);
   if (Number.isNaN(h) || Number.isNaN(m)) return null;
   return h * 60 + m;
 }
-
-function clamp01(x: number) {
-  return Math.max(0, Math.min(1, x));
+function clamp(n: number, lo: number, hi: number) {
+  return Math.max(lo, Math.min(hi, n));
 }
 
-/** Assign items to rows (lanes) to avoid overlaps */
-function computeLanes(rangeItems: Array<{ startMin: number; endMin: number; i: number }>) {
-  // Greedy lane packing
-  // Each lane keeps the latest end time in that lane
-  const lanes: number[][] = [];     // lane -> item indices
-  const laneEnds: number[] = [];    // lane -> last endMin
+export default function DayTimeline({ items }: Props) {
+  // Use a fixed viewBox. Actual pixels come from CSS (100% x 100%).
+  const VB_W = 1200;
+  const VB_H = 280;
 
-  for (const it of rangeItems) {
-    let placed = false;
-    for (let l = 0; l < laneEnds.length; l++) {
-      if (it.startMin >= laneEnds[l] - 0.5 /* fudge */) {
-        lanes[l].push(it.i);
-        laneEnds[l] = it.endMin;
-        placed = true;
-        break;
-      }
-    }
-    if (!placed) {
-      lanes.push([it.i]);
-      laneEnds.push(it.endMin);
+  const PAD_X = 32;
+  const PAD_Y = 22;
+  const TRACK_TOP = 60;
+  const TRACK_H = 100;
+
+  const hours = Array.from({ length: 25 }, (_, i) => i); // 0..24 inclusive
+
+  const innerW = VB_W - PAD_X * 2;
+  const xAt = (mins: number) =>
+    PAD_X + (clamp(mins, DAY_MIN, DAY_MAX) / DAY_MAX) * innerW;
+
+  const c = {
+    bg: "var(--surface-2)",
+    railStroke: "#2a2f3c",
+    grid: "#1f2431",
+    text: "var(--text)",
+    muted: "var(--muted)",
+    barFill: "#6366f1",
+    barFillDone: "#475569",
+    barStroke: "#1f2431",
+    pinFill: "#22c55e",
+  };
+
+  type Range = { x1: number; x2: number; y: number; text: string; done?: boolean };
+  const ranges: Range[] = [];
+  const pins: { x: number; text: string; done?: boolean }[] = [];
+
+  // Normalize inputs
+  for (const it of items) {
+    const s = toMin(it.start ?? null);
+    const e = toMin(it.end ?? null);
+    const t = toMin(it.time ?? null);
+
+    if (s != null && e != null) {
+      ranges.push({
+        x1: xAt(s),
+        x2: xAt(Math.max(e, s + 1)),
+        y: 0,
+        text: it.text,
+        done: it.done,
+      });
+    } else if (t != null) {
+      pins.push({ x: xAt(t), text: it.text, done: it.done });
     }
   }
 
-  // Map item index -> lane number
-  const laneOf: Record<number, number> = {};
-  lanes.forEach((arr, lane) => arr.forEach((idx) => (laneOf[idx] = lane)));
-  return { laneOf, laneCount: lanes.length || 1 };
-}
+  // Lane assignment to avoid overlap
+  const laneEndXs: number[] = [];
+  for (const r of ranges.sort((a, b) => a.x1 - b.x1)) {
+    let lane = 0;
+    while (lane < laneEndXs.length && r.x1 < laneEndXs[lane] + 8) lane++;
+    laneEndXs[lane] = r.x2;
+    r.y = TRACK_TOP + 12 + lane * 28;
+  }
 
-export default function DayTimeline({ items, showGrid = true }: Props) {
-  // Robust dependency: recompute if any relevant field changes
-  const depKey = useMemo(
-    () => items.map(i => `${i.id}|${i.time ?? ""}|${i.start ?? ""}|${i.end ?? ""}|${i.done ? 1 : 0}`).join(","),
-    [items]
-  );
-
-  // Normalize items into milestones & ranges
-  const normalized = useMemo(() => {
-    const milestones: Array<{
-      i: number; id: string; text: string; done?: boolean; min: number;
-    }> = [];
-    const ranges: Array<{
-      i: number; id: string; text: string; done?: boolean; startMin: number; endMin: number;
-    }> = [];
-
-    items.forEach((t, i) => {
-      const timeMin = toMinutes(t.time ?? undefined);
-      const startMin = toMinutes(t.start ?? undefined);
-      const endMin = toMinutes(t.end ?? undefined);
-
-      if (startMin != null && endMin != null) {
-        // Ensure minimum duration for visibility
-        const s = Math.max(0, Math.min(DAY_MIN, startMin));
-        const e = Math.max(0, Math.min(DAY_MIN, endMin));
-        const start = Math.min(s, e);
-        const end = Math.max(s, e);
-        // if duration is zero, render as milestone instead
-        if (end - start < 8) {
-          milestones.push({ i, id: t.id, text: t.text, done: t.done, min: start });
-        } else {
-          ranges.push({ i, id: t.id, text: t.text, done: t.done, startMin: start, endMin: end });
-        }
-      } else if (timeMin != null) {
-        milestones.push({ i, id: t.id, text: t.text, done: t.done, min: Math.max(0, Math.min(DAY_MIN, timeMin)) });
-      }
-    });
-
-    // Sort for consistent lane packing
-    ranges.sort((a, b) => (a.startMin - b.startMin) || (a.endMin - b.endMin));
-    const { laneOf, laneCount } = computeLanes(ranges);
-
-    return { milestones, ranges, laneOf, laneCount };
-  }, [depKey]); // <- recompute on edits
-
-  const hourTicks = Array.from({ length: 25 }, (_, h) => ({
-    h,
-    xPct: (h * 60) / DAY_MIN * 100,
-    label: ((h + 11) % 12) + 1 + (h < 12 ? "a" : "p")
-  }));
-
-  // Layout
-  const laneHeight = 26;     // px per lane
-  const milLaneHeight = 20;  // px, milestones sit below ranges
-  const paddingTop = 8;
-  const paddingBottom = 8;
-  const rangesHeight = Math.max(1, normalized.laneCount) * laneHeight;
-  const milestonesY = paddingTop + rangesHeight + 20; // a bit of gap
-  const totalHeight = milestonesY + milLaneHeight + paddingBottom;
+  const pinY = TRACK_TOP - 8;
 
   return (
-    <div className="timeline">
-      <div className="day-timeline">
-        <svg
-          className="day-timeline-svg"
-          viewBox={`0 0 100 ${totalHeight}`}
-          preserveAspectRatio="none"
-          role="img"
-          aria-label="Day timeline"
-        >
-          {/* Background track */}
-          <rect x={0} y={paddingTop} width={100} height={rangesHeight} rx={2} className="tl-track" />
+    <div className="timeline-card">
+      <svg
+        className="timeline-svg"
+        viewBox={`0 0 ${VB_W} ${VB_H}`}
+        preserveAspectRatio="none"  // <-- fills the box exactly
+        aria-label="Day timeline"
+      >
+        {/* Panel background */}
+        <rect
+          x="1" y="1" width={VB_W - 2} height={VB_H - 2}
+          rx="16" ry="16" fill={c.bg} stroke={c.railStroke}
+        />
 
-          {/* Hour grid */}
-          {showGrid && hourTicks.map((t) => (
-            <g key={`grid-${t.h}`}>
-              <line
-                x1={t.xPct}
-                y1={paddingTop}
-                x2={t.xPct}
-                y2={paddingTop + rangesHeight}
-                className={`tl-grid ${t.h % 6 === 0 ? "major" : ""}`}
-              />
-              {t.h % 3 === 0 && t.h > 0 && t.h < 24 && (
-                <text x={t.xPct} y={paddingTop - 2} className="tl-hour" textAnchor="middle">
-                  {t.label}
+        {/* Rail */}
+        <rect
+          x={PAD_X} y={TRACK_TOP} width={innerW} height={TRACK_H}
+          rx="10" ry="10" fill="transparent" stroke={c.railStroke}
+        />
+
+        {/* Grid + hour labels */}
+        {hours.map((h) => {
+          const x = xAt(h * 60);
+          // Fix: end of day shows 12a, not 12p
+          const label =
+            h === 0 || h === 24 ? "12a" :
+            h < 12 ? `${h}a` :
+            h === 12 ? "12p" : `${h - 12}p`;
+
+          return (
+            <g key={h}>
+              <line x1={x} x2={x} y1={TRACK_TOP} y2={TRACK_TOP + TRACK_H} stroke={c.grid} strokeWidth="1" />
+              <text x={x} y={TRACK_TOP - 18} textAnchor="middle" fontSize="14" fill={c.muted}>
+                {label}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Ranges */}
+        {ranges.map((r, i) => {
+          const w = Math.max(6, r.x2 - r.x1);
+          const fill = r.done ? c.barFillDone : c.barFill;
+          return (
+            <g key={`range-${i}`}>
+              <rect x={r.x1} y={r.y} width={w} height={22} rx={8} ry={8} fill={fill} stroke={c.barStroke} />
+              {w > 46 && (
+                <text x={r.x1 + 6} y={r.y + 15} fontSize="12" fill="#fff" style={{ pointerEvents: "none" }}>
+                  {r.text.slice(0, 40)}
                 </text>
               )}
             </g>
-          ))}
+          );
+        })}
 
-          {/* Range bars */}
-          {normalized.ranges.map((r) => {
-            const lane = normalized.laneOf[r.i] ?? 0;
-            const y = paddingTop + lane * laneHeight + 4;
-            const x = clamp01(r.startMin / DAY_MIN) * 100;
-            const w = clamp01((r.endMin - r.startMin) / DAY_MIN) * 100;
-            return (
-              <g key={`range-${r.id}`} className={`tl-item ${r.done ? "done" : ""}`}>
-                <rect x={x} y={y} width={Math.max(w, 0.7)} height={laneHeight - 8} rx={3} className="tl-bar" />
-                <text x={x + 0.6} y={y + laneHeight / 2 + 4} className="tl-label" textAnchor="start">
-                  {r.text}
-                </text>
-              </g>
-            );
-          })}
+        {/* Pins */}
+        {pins.map((p, i) => {
+          const s = 8;
+          return (
+            <polygon
+              key={`pin-${i}`}
+              points={`${p.x},${pinY - s} ${p.x - s},${pinY + s} ${p.x + s},${pinY + s}`}
+              fill={c.pinFill}
+              stroke={c.barStroke}
+            />
+          );
+        })}
 
-          {/* Milestones (diamonds) */}
-          {normalized.milestones.map((m) => {
-            const x = clamp01(m.min / DAY_MIN) * 100;
-            const y = milestonesY;
-            const s = 3.5; // diamond half-size
-            return (
-              <g key={`mil-${m.id}`} className={`tl-item ${m.done ? "done" : ""}`}>
-                <polygon
-                  points={`${x},${y - s} ${x + s},${y} ${x},${y + s} ${x - s},${y}`}
-                  className="tl-milestone"
-                />
-                <text x={x} y={y + 12} className="tl-mil-label" textAnchor="middle">
-                  {m.text}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-
-        <div className="tl-legend">
-          <span className="legend-box range" /> Time range
-          <span className="legend-dot" /> Set time
-        </div>
-      </div>
+        {/* Legend */}
+        <g transform={`translate(${PAD_X}, ${VB_H - PAD_Y - 8})`}>
+          <circle cx="0" cy="0" r="6" fill={c.barFill} />
+          <text x="12" y="4" fontSize="14" fill={c.muted}>Time range</text>
+          <polygon transform="translate(110,-4)" points={`0,-6 -6,6 6,6`} fill={c.pinFill} stroke={c.barStroke} />
+          <text x="124" y="4" fontSize="14" fill={c.muted}>Set time</text>
+        </g>
+      </svg>
     </div>
   );
 }
