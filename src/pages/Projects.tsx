@@ -8,6 +8,14 @@ export default function Projects() {
 
   return (
     <section className="projects-page">
+      <h2>To-Do List</h2>
+      <p>
+        This to do list project is hosted on my website and allows users to add items they need to do each day and at what time.
+        This project has full login, forgot password, and email verification functonality. 
+      </p>
+      <Link to="/login" className="button">
+        Try it Here
+      </Link>
 
       <h2>Wordle Solver</h2>
       <p>
@@ -16,12 +24,9 @@ export default function Projects() {
         any Wordle, using the words from the real game!
       </p>
 
-      
-
       <Link to="/wordle" className="button">
         Try it Here
       </Link>
-
 
       <h2>COP4331 (Processes for Object Oriented Software Development) - Project Manager</h2>
       <p>In this course, I oversaw the completion of two projects.</p>

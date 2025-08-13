@@ -17,8 +17,8 @@ export default function Header() {
         <nav className="site-nav">
           <NavLink to="/" className="nav-link">Home</NavLink>
           <NavLink to="/projects" className="nav-link">Projects</NavLink>
-          <NavLink to="/contact" className="nav-link">Contact</NavLink>
           <NavLink to="/resume" className="nav-link">Resume</NavLink>
+          <NavLink to="/contact" className="nav-link">Contact</NavLink>
         </nav>
 
         {/* Hamburger Button */}
@@ -38,8 +38,8 @@ export default function Header() {
         <div className="mobile-menu-content">
           <NavLink to="/" className="mobile-link" onClick={() => setMenuOpen(false)}>Home</NavLink>
           <NavLink to="/projects" className="mobile-link" onClick={() => setMenuOpen(false)}>Projects</NavLink>
-          <NavLink to="/contact" className="mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <NavLink to="/resume" className="mobile-link" onClick={() => setMenuOpen(false)}>Resume</NavLink>
+          <NavLink to="/contact" className="mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
         </div>
       </div>
     </header>
