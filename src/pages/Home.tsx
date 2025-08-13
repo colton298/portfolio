@@ -1,12 +1,22 @@
 import headshot from "../assets/IMG_0650.jpeg";
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 export default function Home() {
-  useEffect(() => {
-    document.title = "Colton Santiago | Home";
-  }, []);
   return (
     <div style={{ textAlign: "center", maxWidth: "800px" }}>
+      <Helmet>
+        <title>Colton Santiago | Home</title>
+        <meta
+          name="description"
+          content="Portfolio of Colton Santiago, a UCF CS student."
+        />
+        <meta property="og:title" content="Colton Santiago | Home" />
+        <meta
+          property="og:description"
+          content="Portfolio of Colton Santiago—projects, resume, and contact information."
+        />
+      </Helmet>
+
       <img
         src={headshot}
         alt="My headshot"

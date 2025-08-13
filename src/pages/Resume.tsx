@@ -1,12 +1,20 @@
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+
 export default function Resume() {
-  useEffect(() => {
-      document.title = "Colton Santiago | Resume";
-    }, []);
   const pdfUrl = `${import.meta.env.BASE_URL}Resume.pdf`;
 
   return (
     <>
+      <Helmet>
+        <title>Colton Santiago | Resume</title>
+        <meta
+          name="description"
+          content="View or download Colton Santiago’s resume."
+        />
+        <meta property="og:title" content="Colton Santiago | Resume" />
+        <meta property="og:description" content="View or download Colton Santiago’s resume." />
+      </Helmet>
+
       <iframe
         className="resume-iframe"
         src={pdfUrl}

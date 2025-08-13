@@ -1,13 +1,24 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+
 export default function Projects() {
-  useEffect(() => {
-      document.title = "Colton Santiago | Projects";
-    }, []);
   const wordleUrl = `${import.meta.env.BASE_URL}wordle-solver/index.html`;
 
   return (
     <section className="projects-page">
+      <Helmet>
+        <title>Colton Santiago | Projects</title>
+        <meta
+          name="description"
+          content="Projects by Colton Santiago"
+        />
+        <meta property="og:title" content="Colton Santiago | Projects" />
+        <meta
+          property="og:description"
+          content="See Colton Santiago’s projects"
+        />
+      </Helmet>
+
       <h2>To-Do List</h2>
       <p>
         This to do list project is hosted on my website and allows users to add items they need to do each day and at what time.

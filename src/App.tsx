@@ -1,4 +1,6 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
@@ -15,7 +17,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 
 export default function App() {
   return (
-    <>
+    <HelmetProvider>
       <Header />
       <main className="container">
         <AuthProvider>
@@ -28,7 +30,7 @@ export default function App() {
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot" element={<ForgotPassword />} /> {/* NEW */}
+            <Route path="/forgot" element={<ForgotPassword />} />
 
             <Route element={<ProtectedRoute requireVerified={true} redirectTo="/login" />}>
               <Route path="/todo" element={<TodoPage />} />
@@ -36,6 +38,6 @@ export default function App() {
           </Routes>
         </AuthProvider>
       </main>
-    </>
+    </HelmetProvider>
   );
 }

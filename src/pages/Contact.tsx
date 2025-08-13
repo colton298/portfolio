@@ -1,10 +1,18 @@
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+
 export default function Contact() {
-  useEffect(() => {
-      document.title = "Colton Santiago | Contact";
-    }, []);
   return (
     <section className="contact">
+      <Helmet>
+        <title>Colton Santiago | Contact</title>
+        <meta
+          name="description"
+          content="Contact Colton Santiago via email or LinkedIn."
+        />
+        <meta property="og:title" content="Colton Santiago | Contact" />
+        <meta property="og:description" content="Email and LinkedIn for Colton Santiago." />
+      </Helmet>
+
       <h1>Contact Me</h1>
 
       <p>

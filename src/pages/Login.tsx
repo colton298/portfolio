@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
@@ -6,16 +6,11 @@ import {
   signOut,
   reload,
 } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase";
 import PasswordInput from "../components/PasswordInput";
 
 export default function Login() {
-  useEffect(() => {
-    document.title = "Login | To-Do List";
-    // console.log LOCATION #1: mount
-    console.log("[Login] mounted");
-  }, []);
-
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,12 +27,10 @@ export default function Login() {
     setResendMsg(null);
     setSubmitting(true);
 
-    // console.log LOCATION #2: before signIn
     console.log("[Login] signing in", { emailLen: email.length });
 
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
-      // console.log LOCATION #3: signed in
       console.log("[Login] signed in user:", cred.user.uid, "verified:", cred.user.emailVerified);
 
       await reload(cred.user);
@@ -50,7 +43,6 @@ export default function Login() {
 
       navigate("/todo");
     } catch (err: any) {
-      // console.log LOCATION #4: error
       console.log("[Login] error:", err?.code, err?.message);
       const message =
         err?.code === "auth/invalid-email" ? "Invalid email."
@@ -67,14 +59,12 @@ export default function Login() {
   const resendVerification = async () => {
     setResendMsg(null);
     setError(null);
-    // console.log LOCATION #5: resend click
     console.log("[Login] resend verification requested");
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(cred.user);
       await signOut(auth);
       setResendMsg("Verification email sent. Check your inbox.");
-      // console.log LOCATION #6: resend success
       console.log("[Login] verification re-sent to", cred.user.email);
     } catch (err: any) {
       console.log("[Login] resend error:", err?.code, err?.message);
@@ -85,13 +75,11 @@ export default function Login() {
   const checkVerified = async () => {
     setError(null);
     setResendMsg(null);
-    // console.log LOCATION #7: check verified click
     console.log("[Login] manual verify check");
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       await reload(cred.user);
       const verified = cred.user.emailVerified;
-      // console.log LOCATION #8: after reload
       console.log("[Login] reload checked. verified:", verified);
       if (!verified) {
         await signOut(auth);
@@ -108,6 +96,14 @@ export default function Login() {
 
   return (
     <section className="auth-page">
+      <Helmet>
+        <title>Login | To‑Do List</title>
+        <meta
+          name="description"
+          content="Log in to Colton Santiago’s To‑Do List to access your tasks."
+        />
+      </Helmet>
+
       <h2>Login to To‑Do List</h2>
 
       <form onSubmit={handleLogin} className="auth-form">
@@ -134,7 +130,6 @@ export default function Login() {
         <div className="form-row-center">
           <Link to="/forgot" className="auth-link">Forgot password?</Link>
         </div>
-
 
         {error && <p className="error-text">{error}</p>}
 

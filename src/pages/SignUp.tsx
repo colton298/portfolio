@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase";
 import PasswordInput from "../components/PasswordInput";
 
 export default function SignUp() {
-  useEffect(() => {
-    document.title = "Sign Up | To-Do List";
-    // console.log LOCATION #1: mount
-    console.log("[SignUp] mounted");
-  }, []);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -31,23 +26,19 @@ export default function SignUp() {
 
     const v = validate();
     if (v) {
-      // console.log LOCATION #2: validation
       console.log("[SignUp] validation error:", v);
       setError(v);
       return;
     }
 
     setSubmitting(true);
-    // console.log LOCATION #3: before create
     console.log("[SignUp] creating user", { emailLen: email.length });
 
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
-      // console.log LOCATION #4: created
       console.log("[SignUp] user created:", cred.user.uid);
 
       await sendEmailVerification(cred.user);
-      // console.log LOCATION #5: verification sent
       console.log("[SignUp] verification email sent to:", cred.user.email);
 
       await signOut(auth);
@@ -55,7 +46,6 @@ export default function SignUp() {
       setSuccess("Account created! Check your email for a verification link, then log in.");
       setEmail(""); setPassword(""); setConfirm("");
     } catch (err: any) {
-      // console.log LOCATION #6: error
       console.log("[SignUp] error:", err?.code, err?.message);
       const message =
         err?.code === "auth/email-already-in-use" ? "Email already in use."
@@ -70,6 +60,14 @@ export default function SignUp() {
 
   return (
     <section className="auth-page">
+      <Helmet>
+        <title>Sign Up | To‑Do List</title>
+        <meta
+          name="description"
+          content="Create an account to save and manage your tasks in the To‑Do List app."
+        />
+      </Helmet>
+
       <h2>Create your account</h2>
 
       <form className="auth-form" onSubmit={handleSubmit}>

@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase";
 
 export default function ForgotPassword() {
-  useEffect(() => {
-    document.title = "Reset Password | To-Do List";
-    // console.log LOCATION #F1: mount
-    console.log("[Forgot] mounted");
-  }, []);
-
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,16 +20,13 @@ export default function ForgotPassword() {
     }
 
     setSending(true);
-    // console.log LOCATION #F2: before reset call
     console.log("[Forgot] sending reset to", email);
 
     try {
       await sendPasswordResetEmail(auth, email);
-      // console.log LOCATION #F3: success
       console.log("[Forgot] reset email sent");
       setSuccess("If an account exists for that email, a reset link has been sent.");
     } catch (err: any) {
-      // console.log LOCATION #F4: error
       console.log("[Forgot] error:", err?.code, err?.message);
       const msg =
         err?.code === "auth/invalid-email" ? "Invalid email."
@@ -47,6 +39,14 @@ export default function ForgotPassword() {
 
   return (
     <section className="auth-page">
+      <Helmet>
+        <title>Reset Password | To‑Do List</title>
+        <meta
+          name="description"
+          content="Reset your To‑Do List password by requesting a secure email link."
+        />
+      </Helmet>
+
       <h2>Reset your password</h2>
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="forgot-email">Email</label>
