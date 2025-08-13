@@ -1,3 +1,4 @@
+//Imports
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth"; // <-- type-only import fixes TS verbatimModuleSyntax

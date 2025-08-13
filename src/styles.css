@@ -1,22 +1,28 @@
-/* ===== Base ===== */
+/* ==========================================================================
+   Global Theme & Layout
+   ========================================================================== */
+
 :root {
-  --header-h: 64px;   /* keep in sync with your header height */
+  --header-h: 64px;           /* keep in sync with header height */
   --footer-h: 56px;
+
+  /* Color tokens (dark theme) */
+  --bg: #0b0d12;              /* page background */
+  --text: #e6e8ee;            /* primary text */
+  --muted: #94a3b8;           /* secondary text */
+  --border: #1a1f2b;          /* subtle borders */
+  --surface: #101010;         /* card/panel surfaces */
+  --surface-2: #0c0c0c;       /* input surfaces */
+  --btn-surface: #111625;     /* button surface */
+  --btn-surface-hover: #171d2b;
+  --link: #ffffff;            /* explicit white for auth links */
+  --focus-ring: rgba(91,157,255,0.2);
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
+html, body { margin: 0; padding: 0; height: 100%; }
+body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); }
 
-body {
-  font-family: system-ui, sans-serif;
-  background-color: #0b0d12;
-  color: #e6e8ee;
-}
-
-/* ===== Main Containers ===== */
+/* Centered page container used across pages */
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -25,354 +31,280 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;   /* vertical center */
+  justify-content: center;      /* vertical center */
   text-align: center;
 }
 
-/* Full-bleed canvas for the Resume route */
-.fullbleed {
-  margin: 0;
-  padding: 0;
-  max-width: none;
-  width: 100%;
-  min-height: calc(100vh - var(--header-h));
-  min-height: calc(100dvh - var(--header-h));
-}
+/* Full-bleed canvas (used by Resume route) */
+.fullbleed { margin: 0; padding: 0; max-width: none; width: 100%; min-height: calc(100dvh - var(--header-h)); }
 
-/* ===== Footer ===== */
-.site-footer {
-  border-top: 1px solid #1a1f2b;
-  padding: 1rem;
-  text-align: center;
-  color: #94a3b8;
-}
+/* Footer */
+.site-footer { border-top: 1px solid var(--border); padding: 1rem; text-align: center; color: var(--muted); }
 
-/* ===== Contact Page ===== */
-.contact {
-  max-width: 720px;
-  margin: 0 auto;
-  text-align: center;
-}
-.contact h1 {
-  margin-bottom: 1rem;
-}
-.contact a {
-  color: #cbd5e1;
+
+/* ==========================================================================
+   Links (Auth pages need white links)
+   ========================================================================== */
+
+a { color: #cbd5e1; }
+a:hover { color: #ffffff; }
+
+/* Force white for auth flows (Forgot password / Create account / Back to login) */
+.auth-page a,
+.auth-link {
+  color: var(--link) !important;
   text-decoration: underline;
-  text-underline-offset: 4px;
 }
-.contact a:hover {
+.auth-page a:hover,
+.auth-link:hover { color: #e5e5e5 !important; }
+.auth-page a:visited,
+.auth-link:visited { color: var(--link) !important; }
+
+
+/* ==========================================================================
+   Reusable Elements
+   ========================================================================== */
+
+/* Buttons (normalize both <a class="button"> and <button class="button">) */
+.button,
+button.button {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #1f2737;
+  border-radius: 8px;
+  background: var(--btn-surface);
+  color: #ffffff;               /* ensure readable on dark */
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+  cursor: pointer;
+}
+.button:hover,
+button.button:hover { background: var(--btn-surface-hover); color: #ffffff; transform: translateY(-1px); }
+
+/* Also normalize raw <button> controls used in To‑Do actions */
+button {
+  background: var(--btn-surface);
   color: #ffffff;
+  border: 1px solid #1f2737;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
 }
+button:hover { background: var(--btn-surface-hover); }
 
-/* ===== Resume (full-bleed iframe) ===== */
-.resume-iframe {
-  display: block;
-  width: 100%;
-  height: calc(100vh - var(--header-h));
-  height: calc(100dvh - var(--header-h));
-  border: none;         /* seamless */
-  background: transparent;
+/* Simple card surface (used by Login unverified box, etc.) */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem; }
+
+/* Small metadata chips (used by To‑Do filters and meta) */
+.chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.35rem 0.6rem; border: 1px solid var(--border);
+  border-radius: 999px; background: #0f121a; font-size: 0.95rem; color: var(--text);
 }
+.chip.small { padding: 0.2rem 0.5rem; font-size: 0.8rem; }
+.chip.active { background: #172033; border-color: #24324a; }
 
-/* Floating actions: two lines, subtle, out of the way */
-.resume-actions {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 16px;
-  display: flex;
-  flex-direction: column;    /* newline between links */
-  gap: 6px;
-  padding: 8px 12px;
-  border: 1px solid #1a1f2b;
+/* Text helpers */
+.muted { color: var(--muted); }
+.error-text { color: #f87171; }
+.success-text { color: #34d399; }
+
+/* Layout helpers */
+.form-row-center { display: flex; justify-content: center; }
+
+
+/* ==========================================================================
+   Forms (Global dark inputs + Auth layout + Password toggle fix)
+   ========================================================================== */
+
+/* Global dark form controls to avoid "white text on white box" */
+input, select, textarea {
+  font: inherit; color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid #2a2a2a;
   border-radius: 10px;
-  background: rgba(11, 13, 18, 0.7);
-  backdrop-filter: blur(6px);
-  z-index: 20;
 }
-.resume-actions a {
-  color: #cbd5e1;
-  text-align: center;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-.resume-actions a:hover {
-  color: #ffffff;
+input::placeholder, textarea::placeholder { color: #b3bccd; }
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: #5b9dff; box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* Keep actions comfortably above the iOS bottom bar */
-@media (max-width: 640px) {
-  .resume-actions { bottom: 24px; }
+/* Auth page wrapper & form layout */
+.auth-page {
+  max-width: 520px; margin: 0 auto; padding: 1.25rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
+.auth-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.75rem; }
+.auth-form label { display: flex; flex-direction: column; gap: 0.4rem; font-weight: 600; }
 
-/* ===== Projects Page ===== */
-.projects-page {
-  max-width: 960px;
-  margin: 0 auto;
-  text-align: left;
+/* Password input with "show" icon button — keeps icon inside the field and themed */
+.input-with-icon { position: relative; }
+.input-with-icon input {
+  width: 100%;
+  padding-right: 2.5rem;        /* room for the toggle button */
+  box-sizing: border-box;
 }
+.icon-btn {
+  position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);
+  border: none; background: transparent; padding: 0; display: flex;
+  align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem;
+  color: #cfcfcf; cursor: pointer;
+}
+.icon-btn:hover { color: #ffffff; }
+
+/* Also keep legacy login block compatible (if still routed anywhere) */
+.login-page { max-width: 400px; margin: auto; padding: 2rem; background: #1e1e1e; border-radius: 8px; }
+.login-form { display: flex; flex-direction: column; gap: 1rem; }
+.login-form label { display: flex; flex-direction: column; font-weight: bold; }
+.login-form input { padding: 0.7rem 0.9rem; }
+.login-form button {
+  padding: 0.7rem; font-weight: bold; border: 1px solid #1f2737; border-radius: 8px;
+  background: var(--btn-surface); color: #ffffff; cursor: pointer;
+}
+.login-form button:hover { background: var(--btn-surface-hover); }
+
+
+/* ==========================================================================
+   Contact Page
+   ========================================================================== */
+
+.contact { max-width: 720px; margin: 0 auto; text-align: center; }
+.contact h1 { margin-bottom: 1rem; }
+.contact a { color: #cbd5e1; text-decoration: underline; text-underline-offset: 4px; }
+.contact a:hover { color: #ffffff; }
+
+
+/* ==========================================================================
+   Resume (Full-Bleed Iframe + Floating Actions)
+   ========================================================================== */
+
+.resume-iframe {
+  display: block; width: 100%;
+  height: calc(100dvh - var(--header-h));
+  border: none; background: transparent;
+}
+.resume-actions {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px;
+  display: flex; flex-direction: column; gap: 6px; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: rgba(11,13,18,0.7); backdrop-filter: blur(6px); z-index: 20;
+}
+.resume-actions a { color: #cbd5e1; text-align: center; text-decoration: underline; text-underline-offset: 4px; }
+.resume-actions a:hover { color: #ffffff; }
+@media (max-width: 640px) { .resume-actions { bottom: 24px; } }
+
+
+/* ==========================================================================
+   Projects Page
+   ========================================================================== */
+
+.projects-page { max-width: 960px; margin: 0 auto; text-align: left; }
 .projects-page h1 { text-align: center; margin-bottom: 1rem; }
 .projects-page h2 { margin-top: 2rem; }
 .projects-page h3 { margin-top: 1.25rem; }
 .projects-page h4 { margin-top: 0.75rem; }
-.projects-page p { line-height: 1.6; }
+.projects-page p  { line-height: 1.6; }
 .projects-page ul { margin: 0.5rem 0 1rem 1.25rem; }
 
 /* Match Contact link styling on Projects */
-.projects-page a {
-  color: #cbd5e1;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
+.projects-page a { color: #cbd5e1; text-decoration: underline; text-underline-offset: 4px; }
 .projects-page a:hover { color: #ffffff; }
 
-/* Reusable button */
-.button {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid #1f2737;
-  border-radius: 8px;
-  background: #111625;
-  color: #e6e8ee;
-  text-decoration: none;
-  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
-}
-.button:hover {
-  background: #171d2b;
-  color: #ffffff;
-  transform: translateY(-1px);
-}
+/* Slides container trims iframe corners nicely */
+.slides-embed { margin-top: 0.5rem; border-radius: 8px; overflow: hidden; }
 
-/* Slides container */
-.slides-embed {
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  overflow: hidden; /* trims the iframe corners nicely */
-}
-.login-page {
-  max-width: 400px;
-  margin: auto;
-  padding: 2rem;
-  background: #1e1e1e;
-  border-radius: 8px;
-}
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.login-form label {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-}
-
-.login-form input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login-form button {
-  padding: 0.7rem;
-  background: #007bff;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.auth-page {
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 1.25rem;
-  background: var(--surface, #151515);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.25);
-}
-.auth-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.75rem; }
-.auth-form label { display: flex; flex-direction: column; gap: 0.4rem; font-weight: 600; }
-.auth-form input {
-  padding: 0.7rem 0.9rem; border-radius: 10px; border: 1px solid #2a2a2a;
-  background: #0c0c0c; color: #eaeaea;
-}
-.auth-form input:focus { outline: none; border-color: #5b9dff; box-shadow: 0 0 0 3px rgba(91,157,255,.2); }
+/* ==========================================================================
+   To‑Do Page (Split Layout + Buttons/Textboxes legibility)
+   ========================================================================== */
 
 .todo-page { max-width: 680px; margin: 0 auto; }
-.todo-add { display: flex; gap: .5rem; margin: 1rem 0; }
-.todo-add input { flex: 1; padding: .7rem .9rem; border-radius: 10px; border: 1px solid #2a2a2a; background:#0c0c0c; color:#eaeaea; }
-.todo-filters { display:flex; gap:.5rem; margin:.75rem 0 1.25rem; flex-wrap: wrap; }
-.chip { padding:.4rem .7rem; border-radius:999px; border:1px solid #3a3a3a; background:#151515; color:#eaeaea; }
-.chip.active { border-color:#2d6cdf; }
-.todo-list { list-style:none; padding:0; display:flex; flex-direction:column; gap:.5rem; }
-.todo-item { display:flex; align-items:center; gap:.75rem; padding:.6rem .75rem; border:1px solid #2a2a2a; border-radius:10px; background:#101010; }
-.todo-item.done .todo-text { text-decoration: line-through; opacity:.7; }
-.todo-text { flex: 1; cursor: default; }
-.row-actions { display:flex; gap:.4rem; }
-.edit-row { display:flex; gap:.5rem; flex:1; }
-.edit-row input { flex:1; padding:.6rem .8rem; border-radius:10px; border:1px solid #2a2a2a; background:#0c0c0c; color:#eaeaea; }
 
-.form-row-inline {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  margin: .25rem 0 .5rem;
+/* Panels */
+.todo-split { display: grid; gap: 1rem; }
+@media (min-width: 900px) {
+  .todo-split { grid-template-columns: 1fr 1.5fr; align-items: start; }
 }
+.panel { background: var(--surface); border: 1px solid #2a2a2a; border-radius: 12px; padding: 1rem; }
 
-.input-with-icon {
-  position: relative;
-}
+/* Add new */
+.add-form { display: flex; flex-direction: column; gap: 0.6rem; }
+.add-row  { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
-.input-with-icon input {
-  width: 100%;
-  padding-right: 2.5rem; /* make room for the icon */
-  box-sizing: border-box;
-}
-
-.icon-btn {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: transparent;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  cursor: pointer;
-  color: #cfcfcf;
-}
-
-.icon-btn:hover {
-  color: #ffffff;
-}
-
-.form-row-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.auth-page a {
-  color: #ffffff;
-  text-decoration: underline;
-}
-
-.auth-page a:hover {
-  color: #d0d0d0; /* optional lighter hover */
-}
-
-.auth-page a:visited {
-  color: #ffffff;
-}
-
-/* center the single link under the password input */
-.form-row-center {
-  display: flex;
-  justify-content: center;
-  margin: .5rem 0 1rem; /* adjust spacing as you like */
-}
-
-/* force white links for visibility (ignore visited purple) */
-.auth-link {
-  color: #fff !important;
-  text-decoration: underline;
-  opacity: 1 !important;       /* in case .muted was dimming it */
-}
-.auth-link:visited { color: #fff !important; }
-.auth-link:hover   { color: #e5e5e5; }
-.auth-link:focus-visible { outline: 2px solid #5b9dff; outline-offset: 2px; }
-
-.todo-add { display: grid; grid-template-columns: 1fr auto auto auto; gap: .5rem; }
-@media (max-width: 640px) {
-  .todo-add { grid-template-columns: 1fr 1fr 1fr; }
-  .todo-add .button { grid-column: 1 / -1; }
-}
-
-.select {
-  padding: .6rem .8rem;
-  border-radius: 10px;
-  border: 1px solid #2a2a2a;
-  background: #0c0c0c;
-  color: #eaeaea;
-}
-
-.meta-chips { display:flex; gap:.35rem; margin: 0 .5rem 0 0; }
-.chip.small { padding: .2rem .5rem; font-size: .8rem; }
-.edit-col { display:flex; flex-direction:column; gap:.5rem; flex:1; }
-.edit-row { display:flex; gap:.5rem; flex-wrap: wrap; }
-
-/* Add row now has three inputs + button */
+/* Add row grid: name + date + time + button (stacks on small) */
 .todo-add { display: grid; grid-template-columns: 1fr auto auto auto; gap: .5rem; }
 @media (max-width: 640px) {
   .todo-add { grid-template-columns: 1fr 1fr; }
-  .todo-add .button { grid-column: 1 / -1; }
+  .todo-add .button, .todo-add button { grid-column: 1 / -1; }
 }
 
-/* Reuse your existing .select styles for input[type=date|time] */
-.select {
+/* Ensure To‑Do inputs are dark (prevents white text on white background) */
+.todo-add input,
+.edit-row input {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: .6rem .8rem;
+}
+.select,
+.date-input,
+.time-input {
   padding: .6rem .8rem;
   border-radius: 10px;
   border: 1px solid #2a2a2a;
-  background: #0c0c0c;
-  color: #eaeaea;
-}
-.edit-col { display:flex; flex-direction:column; gap:.5rem; flex:1; }
-.edit-row { display:flex; gap:.5rem; flex-wrap: wrap; }
-.meta-chips { display:flex; gap:.35rem; margin: 0 .5rem 0 0; }
-.chip.small { padding: .2rem .5rem; font-size: .8rem; }
-
-/* two panels, stack on mobile, side-by-side on desktop */
-.todo-split {
-  display: grid;
-  gap: 1rem;
-}
-@media (min-width: 900px) {
-  .todo-split {
-    grid-template-columns: 1fr 1.5fr;
-    align-items: start;
-  }
+  background: var(--surface-2);
+  color: var(--text);
 }
 
-.panel {
-  background: #101010;
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  padding: 1rem;
-}
-
-.add-form { display: flex; flex-direction: column; gap: .6rem; }
-.add-row { display: flex; gap: .5rem; flex-wrap: wrap; }
-
-.view-header { display: flex; flex-direction: column; gap: .6rem; }
-.day-controls {
-  display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
-}
-
-/* Two panels layout (from before) remains the same */
-
-/* Make native calendar/clock icons white in Chromium browsers */
+/* Make native calendar/clock icons white in Chromium; hint dark UI elsewhere */
 .date-input::-webkit-calendar-picker-indicator,
-.time-input::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  opacity: 0.95;
-}
+.time-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.95; }
+.date-input, .time-input { color-scheme: dark; }
 
-/* Hint browsers to use dark UI for form controls (helps Firefox) */
-.date-input,
-.time-input {
-  color-scheme: dark;
-}
+/* View header (date controls + filters) */
+.view-header { display: flex; flex-direction: column; gap: 0.6rem; }
+.day-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
-/* (Optional) style for the "Undated" chip */
-.meta-chips .chip.small[title="This task has no date"] {
-  opacity: .85;
+/* Filters group (uses .chip + .chip.active) */
+.todo-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* To‑do list */
+.todo-list { list-style: none; margin: 0.75rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.todo-item {
+  display: grid; grid-template-columns: auto 1fr auto auto;
+  gap: 0.5rem; align-items: center; padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border); border-radius: 10px; background: #0f121a;
 }
+.todo-item.done { opacity: 0.75; }
+
+/* Text block */
+.todo-text { word-break: break-word; }
+
+/* Meta chips (time, undated) */
+.meta-chips { display: flex; gap: 0.35rem; margin-right: 0.5rem; }
+.meta-chips .chip.small[title="This task has no date"] { opacity: 0.85; }
+
+/* Row actions — ensure buttons are readable (white text) */
+.row-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.row-actions .button,
+.row-actions button {
+  background: var(--btn-surface);
+  color: #ffffff;               /* fix: no more black text */
+  border: 1px solid #1f2737;
+}
+.row-actions .button:hover,
+.row-actions button:hover { background: var(--btn-surface-hover); }
+
+/* Editing layout */
+.edit-col { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+.edit-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+
+/* ==========================================================================
+   Legacy / Compatibility
+   ========================================================================== */
+
+.form-row-inline { display: flex; align-items: center; gap: .5rem; margin: .25rem 0 .5rem; }
+.form-row-between { display: flex; justify-content: space-between; align-items: center; }
