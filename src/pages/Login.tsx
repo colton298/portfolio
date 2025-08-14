@@ -140,7 +140,7 @@ export default function Login() {
       </form>
 
       <p className="muted" style={{ marginTop: "0.75rem" }}>
-        New here? <Link to="/signup">Create an account</Link>
+        <Link to="/signup">Create an account</Link>
       </p>
 
       {unverified && (

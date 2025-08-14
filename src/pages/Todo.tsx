@@ -248,55 +248,70 @@ export default function TodoPage() {
         <div className="panel">
           <h3>Add a new task</h3>
           <form onSubmit={add} className="add-form">
-            <input
-              type="text"
-              value={newText}
-              onChange={(e) => setNewText(e.target.value)}
-              placeholder="What needs to be done?"
-              aria-label="New to-do"
-            />
+            <label>
+              Name:
+              <input
+                type="text"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+                placeholder="What needs to be done?"
+                aria-label="New to-do"
+              />
+            </label>
 
             <div className="add-row">
-              <input
-                type="date"
-                aria-label="Date (optional)"
-                value={newDate}
-                onChange={(e) => setNewDate(e.target.value)}
-                className="select date-input"
-                title="Date (optional)"
-              />
+              <label style={{ display: "flex", flexDirection: "column" }}>
+                Date:
+                <input
+                  type="date"
+                  aria-label="Date (optional)"
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                  className="date-input"
+                  title="Date (optional)"
+                />
+              </label>
             </div>
 
             <div className="add-row" style={{ gap: ".5rem", alignItems: "center" }}>
-              <select
-                aria-label="Time mode"
-                className="select"
-                value={newMode}
-                onChange={(e) => setNewMode(e.target.value as any)}
-                title="Choose single time or time range"
-              >
-                <option value="single">At time</option>
-                <option value="range">Time range</option>
-              </select>
+              <label style={{ display: "flex", flexDirection: "column" }}>
+                Time range:
+                <select
+                  aria-label="Time mode"
+                  className="select"
+                  value={newMode}
+                  onChange={(e) => setNewMode(e.target.value as any)}
+                  title="Choose single time or time range"
+                >
+                  <option value="single">At time</option>
+                  <option value="range">Time range</option>
+                </select>
+              </label>
 
-              <input
-                type="time"
-                aria-label={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
-                value={newStart}
-                onChange={(e) => setNewStart(e.target.value)}
-                className="select time-input"
-                title={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
-              />
-
-              {newMode === "range" && (
+              <label style={{ display: "flex", flexDirection: "column" }}>
+                Start time:
                 <input
                   type="time"
-                  aria-label="End time (optional)"
-                  value={newEnd}
-                  onChange={(e) => setNewEnd(e.target.value)}
-                  className="select time-input"
-                  title="End time (optional)"
+                  aria-label={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
+                  value={newStart}
+                  onChange={(e) => setNewStart(e.target.value)}
+                  className="time-input"
+                  title={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
                 />
+              </label>
+
+              {newMode === "range" && (
+                <label style={{ display: "flex", flexDirection: "column" }}>
+                  End time:
+                  <input
+                    type="time"
+                    aria-label="End time (optional)"
+                    value={newEnd}
+                    onChange={(e) => setNewEnd(e.target.value)}
+                    className="time-input"
+                    title="End time (optional)"
+                  />
+                </label>
               )}
             </div>
 
@@ -306,6 +321,7 @@ export default function TodoPage() {
             </p>
           </form>
         </div>
+
 
         {/* Right: View by day */}
         <div className="panel">

@@ -343,29 +343,26 @@ html, body {
   font-family: inherit;
 }
 
-/* Date/Time pickers: force light icons + dark UI */
 input[type="date"],
 input[type="time"],
 .date-input,
 .time-input {
-  color-scheme: dark;                 /* Firefox/Safari hint */
-  background: var(--surface-2);
-  color: var(--text);
-  border: 1px solid #2a2a2a;
+  color-scheme: dark !important;   /* dark UI hint for FF/Safari */
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 10px;
+  padding-right: 2.25rem;          /* keep space for icon */
 }
 
-/* Chromium/WebKit icon */
+/* Force native indicator visible & recolored */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator,
 .date-input::-webkit-calendar-picker-indicator,
 .time-input::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(1.15); /* make icon white */
-  opacity: 1;
-}
-
-/* Remove default background on the icon hit-area in some WebKit builds */
-input[type="date"]::-webkit-datetime-edit,
-input[type="time"]::-webkit-datetime-edit {
-  color: var(--text);
-  background: transparent;
+  opacity: 1 !important;                 /* ensure visible */
+  pointer-events: auto !important;       /* ensure clickable */
+  filter: brightness(1.3) !important; /* make it white */
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
 }
