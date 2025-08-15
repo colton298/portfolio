@@ -1,25 +1,29 @@
 import React from "react";
 
 /**
- * DayTimeline (dark, responsive, box-filling)
- * - Fills its parent box (SVG width/height = 100%).
- * - Time ranges = rounded bars. Single times = triangle pins.
- * - End label now shows 12a (not 12p) at midnight.
+ * DayTimeline (responsive, fills parent)
+ * - Time ranges = rounded bars. Single times = triangle pins (or 🐱 in pink mode).
+ * - Legend shows circle/triangle (or ❤️/🐱 in pink mode).
+ * - End label shows 12a (not 12p) at midnight.
  *
  * Props:
  *   items: { id: string; text: string; done?: boolean;
  *            time?: string|null; start?: string|null; end?: string|null }[]
+ *   theme?: "dark" | "light" | "pink"
  */
 type Item = {
   id: string;
   text: string;
+  start?: string | null; // HH:MM
+  end?: string | null;   // HH:MM
+  time?: string | null;  // single time
   done?: boolean;
-  time?: string | null;
-  start?: string | null;
-  end?: string | null;
 };
 
-type Props = { items: Item[] };
+type Props = {
+  items: Item[];
+  theme?: "dark" | "light" | "pink";
+};
 
 const DAY_MIN = 0;
 const DAY_MAX = 24 * 60;
@@ -34,8 +38,8 @@ function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
 }
 
-export default function DayTimeline({ items }: Props) {
-  // Use a fixed viewBox. Actual pixels come from CSS (100% x 100%).
+export default function DayTimeline({ items, theme = "dark" }: Props) {
+  // Fixed viewBox; actual pixels from CSS (width/height: 100%)
   const VB_W = 1200;
   const VB_H = 280;
 
@@ -50,16 +54,18 @@ export default function DayTimeline({ items }: Props) {
   const xAt = (mins: number) =>
     PAD_X + (clamp(mins, DAY_MIN, DAY_MAX) / DAY_MAX) * innerW;
 
+  const isPink = theme === "pink";
+
   const c = {
     bg: "var(--surface-2)",
     railStroke: "#2a2f3c",
     grid: "#1f2431",
     text: "var(--text)",
     muted: "var(--muted)",
-    barFill: "#6366f1",
-    barFillDone: "#475569",
+    barFill: isPink ? "#ff7abf" : "#6366f1",
+    barFillDone: isPink ? "#d48db0" : "#475569",
     barStroke: "#1f2431",
-    pinFill: "#22c55e",
+    pinFill: isPink ? "#ff9ad1" : "#22c55e",
   };
 
   type Range = { x1: number; x2: number; y: number; text: string; done?: boolean };
@@ -101,7 +107,7 @@ export default function DayTimeline({ items }: Props) {
       <svg
         className="timeline-svg"
         viewBox={`0 0 ${VB_W} ${VB_H}`}
-        preserveAspectRatio="none"  // <-- fills the box exactly
+        preserveAspectRatio="none"
         aria-label="Day timeline"
       >
         {/* Panel background */}
@@ -119,7 +125,6 @@ export default function DayTimeline({ items }: Props) {
         {/* Grid + hour labels */}
         {hours.map((h) => {
           const x = xAt(h * 60);
-          // Fix: end of day shows 12a, not 12p
           const label =
             h === 0 || h === 24 ? "12a" :
             h < 12 ? `${h}a` :
@@ -135,7 +140,7 @@ export default function DayTimeline({ items }: Props) {
           );
         })}
 
-        {/* Ranges */}
+        {/* Ranges (bars) */}
         {ranges.map((r, i) => {
           const w = Math.max(6, r.x2 - r.x1);
           const fill = r.done ? c.barFillDone : c.barFill;
@@ -153,6 +158,21 @@ export default function DayTimeline({ items }: Props) {
 
         {/* Pins */}
         {pins.map((p, i) => {
+          if (isPink) {
+            return (
+              <text
+                key={`pin-${i}`}
+                x={p.x}
+                y={pinY}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize={16}
+                aria-label="Set time"
+              >
+                🐱
+              </text>
+            );
+          }
           const s = 8;
           return (
             <polygon
@@ -166,10 +186,24 @@ export default function DayTimeline({ items }: Props) {
 
         {/* Legend */}
         <g transform={`translate(${PAD_X}, ${VB_H - PAD_Y - 8})`}>
-          <circle cx="0" cy="0" r="6" fill={c.barFill} />
-          <text x="12" y="4" fontSize="14" fill={c.muted}>Time range</text>
-          <polygon transform="translate(110,-4)" points={`0,-6 -6,6 6,6`} fill={c.pinFill} stroke={c.barStroke} />
-          <text x="124" y="4" fontSize="14" fill={c.muted}>Set time</text>
+          {isPink ? (
+            <>
+              {/* heart = time range */}
+              <text x="0" y="4" textAnchor="middle" fontSize="16">❤️</text>
+              <text x="16" y="4" fontSize="14" fill={c.muted}>Time range</text>
+
+              {/* cat = set time */}
+              <text x="122" y="4" textAnchor="middle" fontSize="16">🐱</text>
+              <text x="138" y="4" fontSize="14" fill={c.muted}>Set time</text>
+            </>
+          ) : (
+            <>
+              <circle cx="0" cy="0" r="6" fill={c.barFill} />
+              <text x="12" y="4" fontSize="14" fill={c.muted}>Time range</text>
+              <polygon transform="translate(110,-4)" points={`0,-6 -6,6 6,6`} fill={c.pinFill} stroke={c.barStroke} />
+              <text x="124" y="4" fontSize="14" fill={c.muted}>Set time</text>
+            </>
+          )}
         </g>
       </svg>
     </div>

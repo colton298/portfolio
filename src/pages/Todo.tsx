@@ -122,11 +122,28 @@ function isValidRange(start?: string, end?: string) {
   return start < end;
 }
 
+/** Observe <html data-theme="..."> so children (e.g., DayTimeline) can react to pink mode */
+function useDocumentTheme() {
+  const get = () =>
+    (document.documentElement.getAttribute("data-theme") || "dark") as
+      "dark" | "light" | "pink";
+  const [theme, setTheme] = useState<"dark" | "light" | "pink">(get);
+
+  useEffect(() => {
+    const mo = new MutationObserver(() => setTheme(get()));
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => mo.disconnect();
+  }, []);
+  return theme;
+}
+
 /* ===================================================== */
 
 export default function TodoPage() {
   const { user } = useAuth();
   const uid = user?.uid!;
+
+  const theme = useDocumentTheme(); // <-- call hook INSIDE the component
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -384,6 +401,7 @@ export default function TodoPage() {
         <div className="timeline">
           {viewMode === "day" && (
             <DayTimeline
+              theme={theme}   // pass theme down (dark | light | pink)
               items={dayTodos.map((t) => ({
                 id: t.id!,
                 text: t.text,
