@@ -61,3 +61,32 @@
 }
 .btn:hover { background: #171d2b; color: #fff; transform: translateY(-1px); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Light theme overrides for Wordle UI */
+:root[data-theme="light"] .cell,
+:root[data-theme="light"] .box {
+  background: #ffffff;
+  color: #0b0d12;
+  border-color: #cfd7e6;
+}
+
+:root[data-theme="light"] .dot {
+  border-color: #cfd7e6;
+  background: #e7ecf6;
+}
+
+:root[data-theme="light"] .hint,
+:root[data-theme="light"] .results h2 {
+  color: #4b5563;
+}
+
+/* Buttons */
+:root[data-theme="light"] .btn {
+  background: #ffffff;
+  color: #0b0d12;
+  border-color: #cfd7e6;
+}
+:root[data-theme="light"] .btn:hover {
+  background: #f3f6fb;
+  color: #0b0d12;
+}

@@ -92,7 +92,7 @@ export default function Projects() {
       <p>
         GitHub:{" "}
         <a href="https://github.com/colton298/newportfolio" target="_blank" rel="noreferrer">
-          https://github.com/colton298/newportfolio
+          https://github.com/colton298/portfolio
         </a>
       </p>
     </section>

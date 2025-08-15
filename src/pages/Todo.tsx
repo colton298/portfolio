@@ -10,6 +10,8 @@ import {
   removeTodo,
 } from "../services/todos";
 import DayTimeline from "../components/DayTimeline";
+import WeekTimeline from "../components/WeekTimeline";
+import MonthCalendar from "../components/MonthCalendar";
 
 /* ---------------------- helpers ---------------------- */
 function toISODate(d: Date) {
@@ -25,6 +27,42 @@ function addDays(iso: string, delta: number) {
   dt.setDate(dt.getDate() + delta);
   return toISODate(dt);
 }
+function addMonths(iso: string, delta: number) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(y, (m ?? 1) - 1, d ?? 1);
+  dt.setMonth(dt.getMonth() + delta);
+  return toISODate(dt);
+}
+function startOfWeekISO(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(y, (m ?? 1) - 1, d ?? 1);
+  const day = dt.getDay(); // 0..6 (Sun..Sat)
+  dt.setDate(dt.getDate() - day);
+  return toISODate(dt);
+}
+function getWeekDays(iso: string) {
+  const start = startOfWeekISO(iso);
+  return Array.from({ length: 7 }, (_, i) => addDays(start, i));
+}
+function firstOfMonthISO(iso: string) {
+  const [y, m] = iso.split("-").map(Number);
+  return toISODate(new Date(y, (m ?? 1) - 1, 1));
+}
+function lastOfMonthISO(iso: string) {
+  const [y, m] = iso.split("-").map(Number);
+  return toISODate(new Date(y, (m ?? 1), 0));
+}
+function monthGrid(iso: string) {
+  const first = firstOfMonthISO(iso);
+  const start = startOfWeekISO(first);
+  const days: string[] = [];
+  let cur = start;
+  for (let i = 0; i < 42; i++) {
+    days.push(cur);
+    cur = addDays(cur, 1);
+  }
+  return days;
+}
 function formatDatePretty(iso?: string | null) {
   if (!iso) return "";
   const [y, m, d] = iso.split("-").map(Number);
@@ -34,6 +72,12 @@ function formatDatePretty(iso?: string | null) {
     month: "short",
     day: "numeric",
   });
+}
+function formatMonthPretty(iso?: string | null) {
+  if (!iso) return "";
+  const [y, m] = iso.split("-").map(Number);
+  const dt = new Date(y, (m ?? 1) - 1, 1);
+  return dt.toLocaleDateString(undefined, { month: "long", year: "numeric" });
 }
 function formatTime(hhmm?: string | null) {
   if (!hhmm) return "";
@@ -54,25 +98,21 @@ function cmpTime(a?: string | null, b?: string | null) {
   return aa.localeCompare(bb);
 }
 function daySort(a: Todo, b: Todo) {
-  // dated first
   const aHasDate = !!a.date;
   const bHasDate = !!b.date;
   if (aHasDate && !bHasDate) return -1;
   if (!aHasDate && bHasDate) return 1;
 
-  // primary: start time (supports legacy single `time`)
   const t1 = (a as any).timeStart ?? (a as any).time ?? null;
   const t2 = (b as any).timeStart ?? (b as any).time ?? null;
   const tcmp = cmpTime(t1, t2);
   if (tcmp !== 0) return tcmp;
 
-  // secondary: end time
   const e1 = (a as any).timeEnd ?? null;
   const e2 = (b as any).timeEnd ?? null;
   const ecmp = cmpTime(e1, e2);
   if (ecmp !== 0) return ecmp;
 
-  // tertiary: text
   const xa = (a.text || "").toLowerCase();
   const xb = (b.text || "").toLowerCase();
   return xa.localeCompare(xb);
@@ -99,6 +139,7 @@ export default function TodoPage() {
 
   // --- View & filters
   const [viewDate, setViewDate] = useState<string>(todayISO());
+  const [viewMode, setViewMode] = useState<"day" | "week" | "month">("day");
   const [filter, setFilter] = useState<"all" | "active" | "done">("all");
 
   // --- Edit row state
@@ -123,11 +164,45 @@ export default function TodoPage() {
     return stop;
   }, [uid]);
 
+  useEffect(() => {
+    console.log("[TodoPage] viewMode changed:", viewMode); // DEBUG (Todo.tsx - useEffect)
+  }, [viewMode]);
+
   // current day's tasks (undated always visible)
   const dayTodos = useMemo(
     () => todos.filter((t) => (t.date ? t.date === viewDate : true)).sort(daySort),
     [todos, viewDate]
   );
+
+  // weekly data
+  const weekDays = useMemo(() => getWeekDays(viewDate), [viewDate]);
+  const weekMap = useMemo(() => {
+    const map: Record<string, Todo[]> = {};
+    weekDays.forEach((d) => (map[d] = []));
+    todos.forEach((t) => {
+      const dd = t.date;
+      if (!dd) return; // undated excluded from week grid
+      if (map[dd]) map[dd].push(t);
+    });
+    Object.values(map).forEach((arr) => arr.sort(daySort));
+    return map;
+  }, [todos, weekDays]);
+
+  // month data
+  const monthDays = useMemo(() => monthGrid(viewDate), [viewDate]);
+  const monthFirst = useMemo(() => firstOfMonthISO(viewDate), [viewDate]);
+  const monthLast = useMemo(() => lastOfMonthISO(viewDate), [viewDate]);
+  const monthMap = useMemo(() => {
+    const map: Record<string, Todo[]> = {};
+    monthDays.forEach((d) => (map[d] = []));
+    todos.forEach((t) => {
+      const dd = t.date;
+      if (!dd) return;
+      if (map[dd]) map[dd].push(t);
+    });
+    Object.values(map).forEach((arr) => arr.sort(daySort));
+    return map;
+  }, [todos, monthDays]);
 
   // filters
   const filtered = useMemo(() => {
@@ -147,7 +222,7 @@ export default function TodoPage() {
       return;
     }
 
-    console.log("[TodoPage] add submit", { textLen: text.length, newMode, newStart, newEnd }); // DEBUG (Todo.tsx line ~140)
+    console.log("[TodoPage] add submit", { textLen: text.length, newMode, newStart, newEnd }); // DEBUG (Todo.tsx add handler)
 
     await createTodo(uid, text, {
       date: newDate || null,
@@ -164,7 +239,7 @@ export default function TodoPage() {
 
   // edit
   const beginEdit = (t: Todo) => {
-    console.log("[TodoPage] begin edit:", t.id); // DEBUG (inside beginEdit)
+    console.log("[TodoPage] begin edit:", t.id); // DEBUG (Todo.tsx beginEdit)
     setEditingId(t.id!);
     setEditingText(t.text);
     setEditingDate(t.date || "");
@@ -185,7 +260,7 @@ export default function TodoPage() {
         alert("End time must be after start time.");
         return;
       }
-      console.log("[TodoPage] save edit", { editingId, editingMode, editingStart, editingEnd }); // DEBUG
+      console.log("[TodoPage] save edit", { editingId, editingMode, editingStart, editingEnd }); // DEBUG (Todo.tsx saveEdit)
       await updateTodo(uid, editingId, {
         text,
         date: editingDate || null,
@@ -202,7 +277,7 @@ export default function TodoPage() {
   };
 
   const cancelEdit = () => {
-    console.log("[TodoPage] cancel edit"); // DEBUG
+    console.log("[TodoPage] cancel edit"); // DEBUG (Todo.tsx cancelEdit)
     setEditingId(null);
     setEditingText("");
     setEditingDate("");
@@ -211,34 +286,142 @@ export default function TodoPage() {
     setEditingMode("single");
   };
 
+  // navigation amounts vary by mode
+  const goPrev = () => {
+    if (viewMode === "day") setViewDate((d) => addDays(d, -1));
+    else if (viewMode === "week") setViewDate((d) => addDays(d, -7));
+    else setViewDate((d) => addMonths(d, -1));
+    console.log("[TodoPage] nav prev", { viewMode }); // DEBUG (Todo.tsx goPrev)
+  };
+  const goToday = () => {
+    setViewDate(todayISO());
+    console.log("[TodoPage] nav today/this", { viewMode }); // DEBUG (Todo.tsx goToday)
+  };
+  const goNext = () => {
+    if (viewMode === "day") setViewDate((d) => addDays(d, +1));
+    else if (viewMode === "week") setViewDate((d) => addDays(d, +7));
+    else setViewDate((d) => addMonths(d, +1));
+    console.log("[TodoPage] nav next", { viewMode }); // DEBUG (Todo.tsx goNext)
+  };
+
+  const centerButtonLabel =
+    viewMode === "day" ? "Today" : viewMode === "week" ? "This week" : "This month";
+
   return (
     <>
       <Helmet>
-        <title>My To‑Do</title>
+        <title>My To-Do</title>
         <meta
           name="description"
-          content="Manage your tasks by day and time. Add, edit, and complete to‑dos with optional scheduling, including time ranges."
+          content="Manage your tasks by day, week, or month. Add, edit, and complete to-dos with optional scheduling, including time ranges."
         />
       </Helmet>
 
-      {/* -------- Full‑width timeline ABOVE the two panels -------- */}
+      {/* -------- Schedule panel (mode-aware) -------- */}
       <div className="panel" style={{ marginBottom: "1rem" }}>
-        <h3>Schedule for {formatDatePretty(viewDate)}</h3>
+        <div className="schedule-header">
+          <h3>
+            {viewMode === "day" && <>Schedule for {formatDatePretty(viewDate)}</>}
+            {viewMode === "week" && <>Week of {formatDatePretty(startOfWeekISO(viewDate))}</>}
+            {viewMode === "month" && <>{formatMonthPretty(viewDate)}</>}
+          </h3>
 
-        {/* The SVG timeline is sized/styled via CSS (.timeline-svg).
-            No component props needed, just feed items. */}
+          <div className="schedule-controls">
+            <div className="mode-switch">
+              <button
+                className={`chip ${viewMode === "day" ? "active" : ""}`}
+                onClick={() => setViewMode("day")}
+                aria-label="Day view"
+              >
+                Day
+              </button>
+              <button
+                className={`chip ${viewMode === "week" ? "active" : ""}`}
+                onClick={() => setViewMode("week")}
+                aria-label="Week view"
+              >
+                Week
+              </button>
+              <button
+                className={`chip ${viewMode === "month" ? "active" : ""}`}
+                onClick={() => setViewMode("month")}
+                aria-label="Month view"
+              >
+                Month
+              </button>
+            </div>
+
+            <div className="day-controls">
+              <button className="chip" onClick={goPrev}>⟵ Prev</button>
+              <button className="chip" onClick={goToday}>{centerButtonLabel}</button>
+              <button className="chip" onClick={goNext}>Next ⟶</button>
+
+              {viewMode === "day" && (
+                <input
+                  type="date"
+                  aria-label="Choose day"
+                  value={viewDate}
+                  onChange={(e) => setViewDate(e.target.value)}
+                  className="select date-input"
+                  title="Choose day"
+                />
+              )}
+              {viewMode === "month" && (
+                <input
+                  type="month"
+                  aria-label="Choose month"
+                  value={viewDate.slice(0, 7)}
+                  onChange={(e) => setViewDate(`${e.target.value}-01`)}
+                  className="select date-input"
+                  title="Choose month"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Timeline body */}
         <div className="timeline">
-          <DayTimeline
-            items={dayTodos.map((t) => ({
-              id: t.id!,
-              text: t.text,
-              done: t.done,
-              // support both range and single time (legacy)
-              time: (t as any).time ?? null,
-              start: (t as any).timeStart ?? null,
-              end: (t as any).timeEnd ?? null,
-            }))}
-          />
+          {viewMode === "day" && (
+            <DayTimeline
+              items={dayTodos.map((t) => ({
+                id: t.id!,
+                text: t.text,
+                done: t.done,
+                time: (t as any).time ?? null,
+                start: (t as any).timeStart ?? null,
+                end: (t as any).timeEnd ?? null,
+              }))}
+            />
+          )}
+
+          {viewMode === "week" && (
+            <WeekTimeline
+              days={weekDays}
+              itemsByDate={Object.fromEntries(
+                weekDays.map((d) => [
+                  d,
+                  (weekMap[d] || []).map((t) => ({
+                    id: t.id!,
+                    text: t.text,
+                    done: t.done,
+                    start: (t as any).timeStart ?? (t as any).time ?? null,
+                    end: (t as any).timeEnd ?? null,
+                  })),
+                ])
+              )}
+            />
+          )}
+
+          {viewMode === "month" && (
+            <MonthCalendar
+              days={monthDays}
+              currentMonthRange={{ first: monthFirst, last: monthLast }}
+              itemsByDate={Object.fromEntries(
+                monthDays.map((d) => [d, (monthMap[d] || [])])
+              )}
+            />
+          )}
         </div>
       </div>
 
@@ -322,24 +505,27 @@ export default function TodoPage() {
           </form>
         </div>
 
-
-        {/* Right: View by day */}
+        {/* Right: View list */}
         <div className="panel">
           <div className="view-header">
-            <h3>Tasks for {formatDatePretty(viewDate)}</h3>
+            <h3>
+              {viewMode === "day" ? `Tasks for ${formatDatePretty(viewDate)}` :
+               viewMode === "week" ? `Tasks for week of ${formatDatePretty(startOfWeekISO(viewDate))}` :
+               `Tasks in ${formatMonthPretty(viewDate)}`}
+            </h3>
 
             <div className="day-controls">
-              <button className="chip" onClick={() => setViewDate(d => addDays(d, -1))}>⟵ Yesterday</button>
-              <button className="chip" onClick={() => setViewDate(todayISO())}>Today</button>
-              <button className="chip" onClick={() => setViewDate(d => addDays(d, +1))}>Tomorrow ⟶</button>
+              <button className="chip" onClick={goPrev}>⟵ Prev</button>
+              <button className="chip" onClick={goToday}>{centerButtonLabel}</button>
+              <button className="chip" onClick={goNext}>Next ⟶</button>
 
               <input
                 type="date"
-                aria-label="Choose day"
+                aria-label="Choose day for list"
                 value={viewDate}
                 onChange={(e) => setViewDate(e.target.value)}
                 className="select date-input"
-                title="Choose day"
+                title="Choose day for list"
               />
             </div>
 
