@@ -19,6 +19,13 @@ export default function Projects() {
         />
       </Helmet>
 
+      <h2>Card Game (WIP)</h2>
+      <p>
+        This is my card game. (WIP)
+      </p>
+      <Link to="/game" className="button">Try it Here</Link>
+ 
+
       <h2>To-Do List</h2>
       <p>
         This to do list project is hosted on my website and allows users to add items they need to do each day and at what time.
@@ -95,6 +102,10 @@ export default function Projects() {
           https://github.com/colton298/portfolio
         </a>
       </p>
+
+      <h3>Sign out from my projects that require login</h3>
+      <p>(To-Do List, Card Game, etc.):</p>
+      <Link to="/signout?next=/projects" className="button">Sign Out</Link>
     </section>
   );
 }

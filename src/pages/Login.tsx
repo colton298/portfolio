@@ -1,6 +1,6 @@
 //Imports
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   sendEmailVerification,
@@ -20,6 +20,10 @@ export default function Login() {
 
   const [unverified, setUnverified] = useState(false);
   const [resendMsg, setResendMsg] = useState<string | null>(null);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const next = params.get("next") || "/todo";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +46,7 @@ export default function Login() {
         return;
       }
 
-      navigate("/todo");
+      navigate(next);
     } catch (err: any) {
       console.log("[Login] error:", err?.code, err?.message);
       const message =
@@ -88,7 +92,7 @@ export default function Login() {
         setError("Still not verified. Please check your email and try again.");
         return;
       }
-      navigate("/todo");
+      navigate(next);
     } catch (err: any) {
       console.log("[Login] check verified error:", err?.code, err?.message);
       setError("Could not verify. Try logging in again.");
@@ -98,14 +102,14 @@ export default function Login() {
   return (
     <section className="auth-page">
       <Helmet>
-        <title>Login | To‑Do List</title>
+        <title>Login</title>
         <meta
           name="description"
-          content="Log in to Colton Santiago’s To‑Do List to access your tasks."
+          content="Log in to Colton Santiago’s portfolio"
         />
       </Helmet>
 
-      <h2>Login to To‑Do List</h2>
+      <h2>Login</h2>
 
       <form onSubmit={handleLogin} className="auth-form">
         <label htmlFor="login-email">Email</label>
