@@ -19,16 +19,26 @@ export default function Projects() {
         />
       </Helmet>
 
-      <h2>Card Game (WIP)</h2>
+      <h2>Tri Peaks Solitaire Card Game (WIP)</h2>
       <p>
-        This is my card game. (WIP)
+        I have added Tri Peaks Solitaire to my website. This uses the same login/signup database as my to-do list.
+        Known issues: 
+        Cards can be discarded without getting rid of cards above them, 
+        New game doesn't start automatically
+        Working on:
+        Mobile UI
+        Tutorial page
+        Better card assets
+        Light mode support
       </p>
       <Link to="/game" className="button">Try it Here</Link>
  
 
       <h2>To-Do List</h2>
       <p>
-        This to do list project is hosted on my website and allows users to add items they need to do each day and at what time.
+        This to-do list project is hosted on my website and allows users to add items they need to do each day and at what time.
+        Users can choose to list to-do items at a singular time, within a span of time, or simply on a specific day. 
+        In addition, users can view their daily, weekly, and monthly tasks using the timeline panel, which updates when users modify their to-do list. 
         This project has full login, forgot password, and email verification functonality. 
       </p>
       <Link to="/login" className="button">
