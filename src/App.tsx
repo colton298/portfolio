@@ -13,7 +13,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import TodoPage from "./pages/TodoPage";
 import ForgotPassword from "./pages/ForgotPassword";
-import CardGame from "./pages/CardGame";
+import CardGame from "./components/cardgame";
 import SignOut from "./auth/SignOut";
 
 import { AuthProvider } from "./auth/AuthProvider";

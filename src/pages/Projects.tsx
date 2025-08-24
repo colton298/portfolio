@@ -82,17 +82,9 @@ export default function Projects() {
           aria-labelledby="personal-tab"
           hidden={!isPersonal}
         >
-          <h2>Tri Peaks Solitaire Card Game (WIP)</h2>
+          <h2>Tri Peaks Solitaire Card Game</h2>
           <p>
             I have added Tri Peaks Solitaire to my website. This uses the same login/signup database as my to-do list.
-            Known issues:
-            Cards can be discarded without getting rid of cards above them,
-            New game doesn't start automatically
-            Working on:
-            Mobile UI
-            Tutorial page
-            Better card assets
-            Light mode support
           </p>
           <Link to="/game" className="button">Try it Here</Link>
 

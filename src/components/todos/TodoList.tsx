@@ -98,11 +98,13 @@ export default function TodoList({
       <div className="view-header">
         <h3>{heading}</h3>
 
-        <div className="day-controls">
+        <div className="tasks-nav centered">
           <button className="chip" onClick={onPrev}>⟵ Prev</button>
           <button className="chip" onClick={onToday}>{centerButtonLabel}</button>
           <button className="chip" onClick={onNext}>Next ⟶</button>
+        </div>
 
+        <div className="tasks-date centered">
           <input
             type="date"
             aria-label="Choose day for list"
@@ -111,9 +113,12 @@ export default function TodoList({
             className="select date-input"
             title="Choose day for list"
           />
-        </div>
+      </div>
 
-        <FiltersComponent counts={counts} value={filter} onChange={onFilterChange} />
+<div className="tasks-filters centered">
+  <FiltersComponent counts={counts} value={filter} onChange={onFilterChange} />
+</div>
+
       </div>
 
       <ul className="todo-list">

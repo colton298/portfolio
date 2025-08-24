@@ -7,13 +7,45 @@
 }
 .panel { background: var(--surface); border: 1px solid var(--card-border); border-radius: 12px; padding: 1rem; color: var(--text); }
 
-.add-form { display: flex; flex-direction: column; gap: 0.6rem; }
+/* make the top schedule panel stretch wider */
+.panel--wide {
+  width: min(95vw, 800px);
+  margin-inline: auto;
+}
+
+
+/* Two-column rows that visually match your "Name" input */
+.add-form .form-row {
+  display: grid;
+  grid-template-columns: 160px 1fr; /* label width + control */
+  align-items: center;
+  gap: .75rem;
+  margin-top: .5rem;
+}
+.add-form .form-label { color: var(--text); opacity: .9; }
+.add-form .form-control input,
+.add-form .form-control select {
+  width: 100%;
+}
+
 .add-row  { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
 .select { padding: .6rem .8rem; border-radius: 10px; border: 1px solid var(--card-border); background: var(--surface-2); color: var(--text); }
 
 /* View header (date controls + filters) */
-.view-header { display: flex; flex-direction: column; gap: 0.6rem; }
+/* Center the three rows under the Tasks header */
+.view-header > h3 { text-align: center; margin-top: 0; }
+
+.view-header .centered {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: .5rem;
+}
+
+.view-header .tasks-date input.date-input { text-align: center; }
+.view-header .tasks-filters .todo-filters { justify-content: center; display: flex; gap: .5rem; }
+
 .day-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .todo-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
@@ -72,5 +104,55 @@
 }
 .first-visit-close:hover { opacity: 1; }
 
+/* -------- ScheduleHeader layout -------- */
+/* Schedule header scaffold */
+.schedule-header { display: grid; gap: 0.75rem; }
+
+/* Title */
+.sh-title { margin: 0; text-align: center; font-size: 1.35rem; font-weight: 700; }
+
+/* Top pills centered */
+.sh-row.sh-modes { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; }
+
+/* Centered nav row */
+.sh-row.sh-nav-row { display: flex; justify-content: center; }
+.sh-nav { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+
+/* Date row aligned with timeline’s inner edge.
+   Your .timeline has padding: 0.5rem 0.75rem, so use the same left inset. */
+.sh-row.sh-date-row { padding-left: 0.75rem; }
+
+/* Match spacing with the "Name" row and prevent overflow */
+.add-form .form-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;   /* slightly tighter than 160px */
+  align-items: center;
+  gap: 0.5rem;                        /* tighter gap like Name */
+  margin-top: 0.5rem;
+}
+
+/* Make sure inputs don't grow past the panel due to padding/border */
+.add-form input,
+.add-form select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ensure our styled date/time/select controls also respect the width */
+.add-form .date-input,
+.add-form .time-input,
+.add-form .select {
+  width: 100%;
+}
+
+/* (Optional) If you still see any visual creep, clip the panel content) */
+.panel { overflow: hidden; }
+
+/* Responsive: stack label over control on small screens */
+@media (max-width: 520px) {
+  .add-form .form-row { grid-template-columns: 1fr; }
+  .add-form .form-label { margin-bottom: .25rem; }
+}
 
 

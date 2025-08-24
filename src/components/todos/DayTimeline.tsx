@@ -39,9 +39,8 @@ function clamp(n: number, lo: number, hi: number) {
 }
 
 export default function DayTimeline({ items, theme = "dark" }: Props) {
-  // Fixed viewBox; actual pixels from CSS (width/height: 100%)
-  const VB_W = 1200;
-  const VB_H = 280;
+  
+
 
   const PAD_X = 32;
   const PAD_Y = 22;
@@ -49,7 +48,8 @@ export default function DayTimeline({ items, theme = "dark" }: Props) {
   const TRACK_H = 100;
 
   const hours = Array.from({ length: 25 }, (_, i) => i); // 0..24 inclusive
-
+  
+  const VB_W = 1200;
   const innerW = VB_W - PAD_X * 2;
   const xAt = (mins: number) =>
     PAD_X + (clamp(mins, DAY_MIN, DAY_MAX) / DAY_MAX) * innerW;
@@ -92,16 +92,23 @@ export default function DayTimeline({ items, theme = "dark" }: Props) {
   }
 
   // Lane assignment to avoid overlap
+  
   const laneEndXs: number[] = [];
-  for (const r of ranges.sort((a, b) => a.x1 - b.x1)) {
-    let lane = 0;
-    while (lane < laneEndXs.length && r.x1 < laneEndXs[lane] + 8) lane++;
-    laneEndXs[lane] = r.x2;
-    r.y = TRACK_TOP + 12 + lane * 28;
-  }
+    for (const r of ranges.sort((a, b) => a.x1 - b.x1)) {
+      let lane = 0;
+      while (lane < laneEndXs.length && r.x1 < laneEndXs[lane] + 8) lane++;
+      laneEndXs[lane] = r.x2;
+      r.y = TRACK_TOP + 12 + lane * 28;
+    }
+
+
+const lanes = Math.max(1, laneEndXs.length);
+const VB_H = 220 + lanes * 28; // base + per-lane growth
 
   const pinY = TRACK_TOP - 8;
 
+
+  
   return (
     <div className="timeline-card">
       <svg

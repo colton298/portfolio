@@ -7,9 +7,9 @@
   background: var(--panel, #fff);
 }
 
-.day-timeline-svg {
+.timeline-card .timeline-svg {
   width: 100%;
-  height: 160px; /* grows as lanes increase via viewBox */
+  height: 320px; /* grows as lanes increase via viewBox */
   display: block;
 }
 
@@ -75,8 +75,8 @@
 
 /* Container: centers the whole timeline and constrains width */
 .timeline {
-  max-width: 900px;          /* tweak to taste */
-  margin-inline: auto;       /* <-- centers */
+  max-width: 100%;          /* tweak to taste */
+  margin-inline: 0;       /* <-- centers */
   padding: 0.5rem 0.75rem;
 }
 

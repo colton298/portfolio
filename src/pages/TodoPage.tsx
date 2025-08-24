@@ -142,7 +142,7 @@ export default function TodoPage() {
 
 
       {/* -------- Schedule panel -------- */}
-      <div className="panel" style={{ marginBottom: "1rem" }}>
+      <div className="panel panel--wide" style={{ marginBottom: "1rem" }}>
         <ScheduleHeader
           viewMode={viewMode}
           viewDate={viewDate}

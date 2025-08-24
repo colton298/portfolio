@@ -42,20 +42,22 @@ export default function AddTodoForm({ uid }: Props) {
     <div className="panel">
       <h3>Add a new task</h3>
       <form onSubmit={add} className="add-form">
-        <label>
-          Name:
-          <input
-            type="text"
-            value={newText}
-            onChange={(e) => setNewText(e.target.value)}
-            placeholder="What needs to be done?"
-            aria-label="New to-do"
+      <div className="form-row">
+      <div className="form-label">Name:</div>
+      <div className="form-control">
+        <input
+          type="text"
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="What needs to be done?"
+          aria-label="New to-do"
           />
-        </label>
+        </div>
+      </div>
 
-        <div className="add-row">
-          <label style={{ display: "flex", flexDirection: "column" }}>
-            Date:
+        <div className="form-row">
+          <div className="form-label">Date:</div>
+          <div className="form-control">
             <input
               type="date"
               aria-label="Date (optional)"
@@ -64,12 +66,12 @@ export default function AddTodoForm({ uid }: Props) {
               className="date-input"
               title="Date (optional)"
             />
-          </label>
+          </div>
         </div>
 
-        <div className="add-row" style={{ gap: ".5rem", alignItems: "center" }}>
-          <label style={{ display: "flex", flexDirection: "column" }}>
-            Time range:
+        <div className="form-row">
+          <div className="form-label">Time range:</div>
+          <div className="form-control">
             <select
               aria-label="Time mode"
               className="select"
@@ -80,10 +82,12 @@ export default function AddTodoForm({ uid }: Props) {
               <option value="single">At time</option>
               <option value="range">Time range</option>
             </select>
-          </label>
+          </div>
+        </div>
 
-          <label style={{ display: "flex", flexDirection: "column" }}>
-            Start time:
+        <div className="form-row">
+          <div className="form-label">Start time:</div>
+          <div className="form-control">
             <input
               type="time"
               aria-label={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
@@ -92,11 +96,13 @@ export default function AddTodoForm({ uid }: Props) {
               className="time-input"
               title={newMode === "range" ? "Start time (optional)" : "Time (optional)"}
             />
-          </label>
+          </div>
+        </div>
 
-          {newMode === "range" && (
-            <label style={{ display: "flex", flexDirection: "column" }}>
-              End time:
+        {newMode === "range" && (
+          <div className="form-row">
+            <div className="form-label">End time:</div>
+            <div className="form-control">
               <input
                 type="time"
                 aria-label="End time (optional)"
@@ -105,14 +111,15 @@ export default function AddTodoForm({ uid }: Props) {
                 className="time-input"
                 title="End time (optional)"
               />
-            </label>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
 
         <button className="button" type="submit">Add</button>
         <p className="muted" style={{ marginTop: ".5rem" }}>
           Tip: leave date/time blank if this task isn’t tied to a specific schedule.
         </p>
+
       </form>
     </div>
   );
