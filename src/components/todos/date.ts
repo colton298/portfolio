@@ -84,6 +84,12 @@ export function formatRange(start?: string | null, end?: string | null) {
   return `${s}–${formatTime(end)}`;
 }
 
+export function parseISODateLocal(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
+
+
 /* ---------------------- sorting & validation ---------------------- */
 function cmpTime(a?: string | null, b?: string | null) {
   const aa = a ?? "99:99";

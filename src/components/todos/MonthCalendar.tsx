@@ -1,4 +1,5 @@
 // src/components/MonthCalendar.tsx
+import { parseISODateLocal } from "./date";
 type TodoLite = { id?: string; text: string; done?: boolean; timeStart?: string | null; timeEnd?: string | null };
 export default function MonthCalendar({
   days,
@@ -9,14 +10,14 @@ export default function MonthCalendar({
   currentMonthRange: { first: string; last: string };
   itemsByDate: Record<string, TodoLite[]>;
 }) {
-  const month = new Date(currentMonthRange.first).getMonth();
+  const month = parseISODateLocal(currentMonthRange.first).getMonth();
   return (
     <div className="month-grid">
       {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => (
         <div key={d} className="month-dow">{d}</div>
       ))}
       {days.map((iso) => {
-        const dt = new Date(iso);
+        const dt = parseISODateLocal(iso);
         const inMonth = dt.getMonth() === month;
         const list = itemsByDate[iso] || [];
         return (

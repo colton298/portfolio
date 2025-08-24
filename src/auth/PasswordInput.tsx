@@ -6,7 +6,7 @@ type Props = {
   placeholder?: string;
   autoComplete?: string;
   ariaLabel?: string;
-  inputId?: string; // optional – if omitted we generate one
+  inputId?: string;
 };
 
 export default function PasswordInput({

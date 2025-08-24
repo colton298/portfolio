@@ -1,4 +1,4 @@
-// src/components/WeekTimeline.tsx
+import { parseISODateLocal } from "./date"; 
 type Item = {
   id: string;
   text: string;
@@ -32,7 +32,7 @@ export default function WeekTimeline({
   return (
     <div className="week-grid">
       {days.map((iso) => {
-        const date = new Date(iso);
+        const date = parseISODateLocal(iso);
         const items = (itemsByDate[iso] || []).slice().sort((a, b) => {
           const aa = a.start ?? "99:99";
           const bb = b.start ?? "99:99";
