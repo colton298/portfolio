@@ -1,0 +1,133 @@
+/* Themes */
+/* Light Theme */
+:root[data-theme="light"] {
+  --bg: #f6f7fb;
+  --text: #0b0d12;
+  --muted: #4b5563;
+  --border: #d9dfeb;
+  --surface: #ffffff;
+  --surface-2: #f2f4f8;
+
+  --btn-surface: #ffffff;
+  --btn-surface-hover: #f3f6fb;
+
+  --link: #0b0d12;                 /* links are dark in light theme */
+  --focus-ring: rgba(37, 99, 235, 0.18);
+  --accent: rgba(0,0,0,.22);
+
+  --chip-bg: #eef2f8;
+  --chip-bg-active: #dfe8f6;
+
+  --card-bg: #ffffff;
+  --card-border: #cfd7e6;
+  --card-bg-weak: #f6f9ff;
+
+  --resume-actions-bg: rgba(255,255,255,0.85);
+
+  --overlay-scrim: rgba(0, 0, 0, 0.28);
+}
+
+/* PINK THEME — easter egg */
+:root[data-theme="pink"] {
+  /* Palette */
+  --bg: #ffe6f4;                 /* page background */
+  --text: #3a0b23;               /* main text */
+  --muted: #7a3a57;
+  --border: #f4b7d3;
+  --surface: #fff5fb;            /* panels */
+  --surface-2: #ffeefd;          /* inputs */
+
+  --btn-surface: #ffecf7;        /* buttons */
+  --btn-surface-hover: #ffe3f3;
+
+  --link: #a0006a;               
+  --focus-ring: rgba(255, 0, 122, 0.18);
+  --accent: rgba(160, 0, 106, .28);
+
+  --chip-bg: #ffe3f3;
+  --chip-bg-active: #ffd1ea;
+
+  --card-bg: #fff;               /* todo items */
+  --card-border: #f4b7d3;
+  --card-bg-weak: #fff0f8;       /* week cards */
+
+  --resume-actions-bg: rgba(255, 240, 248, 0.9); /* floating resume box */
+
+  --overlay-scrim: rgba(160, 0, 106, 0.20);
+}
+
+/* Ensure date/time pickers look right in pink (light) mode */
+:root[data-theme="pink"] .date-input,
+:root[data-theme="pink"] .time-input,
+:root[data-theme="pink"] input[type="date"],
+:root[data-theme="pink"] input[type="time"] {
+  color-scheme: light;
+}
+:root[data-theme="pink"] .date-input::-webkit-calendar-picker-indicator,
+:root[data-theme="pink"] .time-input::-webkit-calendar-picker-indicator,
+:root[data-theme="pink"] input[type="date"]::-webkit-calendar-picker-indicator,
+:root[data-theme="pink"] input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+
+/* Inputs use light color-scheme and normal icon color */
+:root[data-theme="light"] .date-input,
+:root[data-theme="light"] .time-input,
+:root[data-theme="light"] input[type="date"],
+:root[data-theme="light"] input[type="time"] {
+  color-scheme: light;
+}
+:root[data-theme="light"] .date-input::-webkit-calendar-picker-indicator,
+:root[data-theme="light"] .time-input::-webkit-calendar-picker-indicator,
+:root[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator,
+:root[data-theme="light"] input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: none;                      /* remove white tint in light mode */
+}
+
+:root[data-theme="light"] input, 
+:root[data-theme="light"] select,
+:root[data-theme="light"] textarea {
+  border-color: #cfd7e6;
+}
+
+/* Projects subheader */
+.projects-subnav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border, #444);
+  padding: 0.5rem 1rem;
+  background: var(--bg, #111); /* match header background */
+  
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+}
+
+
+
+.subnav-tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  opacity: 0.8;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.subnav-tab:hover { opacity: 1; }
+
+.subnav-tab.active {
+  opacity: 1;
+  font-weight: 600;
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 2px;
+}
+
+.projects-panels > [role="tabpanel"][hidden] {
+  display: none;
+}

@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import "../wordle.css";
+import '../css/index.css';
 
 function normLetter(s: string) {
   return (s || "").slice(-1).toLowerCase().replace(/[^a-z]/g, "");

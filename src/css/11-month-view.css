@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Month View (compact calendar)
+   ========================================================================== */
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: .5rem;
+}
+.month-dow { font-size: .8rem; opacity: .7; text-align: center; }
+.month-cell {
+  border: 1px solid var(--card-border);
+  border-radius: .5rem;
+  padding: .5rem;
+  min-height: 90px;
+}
+.month-cell-header { display: flex; align-items: center; justify-content: space-between; font-weight: 600; }
+.month-cell .badge {
+  font-size: .75rem; padding: 0 .35rem;
+  border: 1px solid var(--card-border); border-radius: .5rem; opacity: .8;
+}
+.month-cell-list {
+  margin: .35rem 0 0; padding: 0; list-style: none;
+  display: grid; gap: .15rem; font-size: .85rem;
+}
+.month-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.month-more { font-size: .8rem; }

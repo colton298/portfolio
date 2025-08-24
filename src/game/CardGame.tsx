@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useAuth } from "../auth/AuthProvider";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
+import FirstVisitNotice from "../components/common/FirstVisitNotice";
 
 /** ---------- Card / Deck helpers ---------- */
 type Suit = "♠" | "♥" | "♦" | "♣";
@@ -180,6 +181,19 @@ export default function CardGame() {
         <meta name="description" content="Tri Peaks Solitaire with correct peak geometry, comfortable spacing, and Firebase scores." />
       </Helmet>
 
+    <FirstVisitNotice storageKey="tripeaks-welcome-v1">
+      <h3 style={{ marginTop: 0 }}>How to play Tri Peaks</h3>
+      <ul style={{ margin: 0, paddingLeft: "1.25rem" }}>
+        <li>Try to pick up all cards from the three piles.</li>
+        <li>A card can be picked up if your currently held card is one rank higher or lower than it, and if it is not covered by another card.</li>
+        <li>Picking up a card makes that card your currently held card.</li>
+        <li>If you cannot play, you can deal from the stock, but only a limited number of times.</li>
+      </ul>
+      <p style={{ marginTop: "0.75rem" }}>
+        Tip: playable cards are highlighted. Click × to start.
+      </p>
+    </FirstVisitNotice>
+
       <h2>Tri Peaks Solitaire</h2>
       <p className="muted">{subtitle}</p>
 
@@ -292,7 +306,7 @@ export default function CardGame() {
         <div>Best: <strong>{highScore}</strong></div>
         {status !== "playing" && (
           <div style={{ marginLeft: "auto" }}>
-            {status === "won" ? "🎉 You cleared all peaks!" : "Out of moves."} {saving ? "Saving…" : ""}
+            {status === "won" ? "You cleared all peaks!" : "Out of moves."} {saving ? "Saving…" : ""}
             <button className="button" onClick={dealNewGame} style={{ marginLeft: 12 }} disabled={saving}>
               Play Again
             </button>

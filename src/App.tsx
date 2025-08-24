@@ -11,7 +11,7 @@ import Header from "./components/Header";
 import Wordle from "./pages/Wordle";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import TodoPage from "./pages/Todo";
+import TodoPage from "./pages/TodoPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import CardGame from "./game/CardGame";
 import SignOut from "./auth/SignOut";

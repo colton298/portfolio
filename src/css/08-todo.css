@@ -1,0 +1,76 @@
+/* To-Do Page */
+.todo-page { max-width: 680px; margin: 0 auto; }
+
+.todo-split { display: grid; gap: 1rem; }
+@media (min-width: 900px) {
+  .todo-split { grid-template-columns: 1fr 1.5fr; align-items: start; }
+}
+.panel { background: var(--surface); border: 1px solid var(--card-border); border-radius: 12px; padding: 1rem; color: var(--text); }
+
+.add-form { display: flex; flex-direction: column; gap: 0.6rem; }
+.add-row  { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.select { padding: .6rem .8rem; border-radius: 10px; border: 1px solid var(--card-border); background: var(--surface-2); color: var(--text); }
+
+/* View header (date controls + filters) */
+.view-header { display: flex; flex-direction: column; gap: 0.6rem; }
+.day-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.todo-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* List */
+.todo-list { list-style: none; margin: 0.75rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.todo-item {
+  display: grid; grid-template-columns: auto 1fr auto auto;
+  gap: 0.5rem; align-items: center; padding: 0.6rem 0.75rem;
+  border: 1px solid var(--card-border); border-radius: 10px; background: var(--card-bg);
+}
+.todo-item.done { opacity: 0.75; }
+
+.todo-text { word-break: break-word; }
+
+.meta-chips { display: flex; gap: 0.35rem; margin-right: 0.5rem; }
+.meta-chips .chip.small[title="This task has no date"] { opacity: 0.85; }
+
+.row-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* Editing layout */
+.edit-col { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+.edit-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.first-visit-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-scrim);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.first-visit-modal {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  position: relative;
+}
+
+.first-visit-close {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  cursor: pointer;
+  opacity: .85;
+}
+.first-visit-close:hover { opacity: 1; }
+
+
+

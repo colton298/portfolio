@@ -1,3 +1,4 @@
+/* === Header styles (migrated from Header.css) === */
 /* --- Shell --- */
 .site-header {
   position: sticky;
@@ -8,6 +9,11 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* When a subheader is present, let it own the bottom divider */
+.site-header:has(.subheader-slot:not(:empty)) {
+  border-bottom: 0; /* prevent double line under the whole header */
+}
+
 /* Full-bleed inner bar */
 .header-inner {
   position: relative;
@@ -16,7 +22,26 @@
   align-items: center;
   padding: 0.75rem 16px 0.75rem 0;
   gap: 8px;
+  grid-template-rows: auto auto;
 }
+
+.subheader-slot {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;                      /* span full width of header grid */
+  grid-row: 2;                              
+  display: block;
+  border-top: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg), transparent 6%);
+}
+
+/* Hide the slot when nothing is portaled into it */
+.subheader-slot:empty {
+  display: none;
+  border-top: 0;
+  padding: 0;
+}
+
 
 /* Brand */
 .site-title { justify-self: start; }
@@ -31,11 +56,13 @@
 
 /* Centered nav */
 .site-nav {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: static;          /* was: absolute */
+  grid-column: 2;            /* center column of header grid */
+  grid-row: 1;               /* first row (main header bar) */
+  justify-self: center;      /* center within that column */
   display: flex;
   gap: clamp(12px, 2.2vw, 28px);
+  z-index: 2;                /* stays above background, below overlays */
 }
 .nav-link {
   color: color-mix(in oklab, var(--text), #8aa 40%);
@@ -132,3 +159,4 @@
     width: 100%;
   }
 }
+

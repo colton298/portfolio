@@ -1,0 +1,48 @@
+/* Projects Page */
+.projects-page { max-width: 960px; margin: 0 auto; text-align: left; }
+.projects-page h1 { text-align: center; margin-bottom: 1rem; }
+.projects-page h2 { margin-top: 2rem; }
+.projects-page h3 { margin-top: 1.25rem; }
+.projects-page h4 { margin-top: 0.75rem; }
+.projects-page p  { line-height: 1.6; }
+.projects-page ul { margin: 0.5rem 0 1rem 1.25rem; }
+
+/* Projects subheader */
+.projects-subnav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border, #444);
+  padding: 0.5rem 1rem;
+  background: inherit;               /* inherits header bg */
+
+  /* remove page-level sticky so it doesn’t fight the header */
+  position: static;                  /* was: sticky */
+  top: auto;                         /* was: 60px */
+  z-index: auto;                     /* was: 100 */
+}
+
+.subnav-tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  opacity: 0.8;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.subnav-tab:hover { opacity: 1; }
+
+.subnav-tab.active {
+  opacity: 1;
+  font-weight: 600;
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 2px;
+}
+
+.projects-panels > [role="tabpanel"][hidden] {
+  display: none;
+}

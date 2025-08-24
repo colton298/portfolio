@@ -1,0 +1,15 @@
+/*Imports all css files*/
+@import url("./00-header.css");
+@import url("./01-base.css");
+@import url("./02-links.css");
+@import url("./03-components.css");
+@import url("./04-forms-auth.css");
+@import url("./05-contact.css");
+@import url("./06-resume.css");
+@import url("./07-projects.css");
+@import url("./08-todo.css");
+@import url("./09-schedule-timeline.css");
+@import url("./10-week-view.css");
+@import url("./11-month-view.css");
+@import url("./12-themes.css");
+@import url("./wordle.css");

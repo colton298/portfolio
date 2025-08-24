@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./Header.css";
+import '../css/index.css';
 
 type Theme = "dark" | "light" | "pink";
 
@@ -91,6 +91,8 @@ export default function Header() {
         <div className="site-title">
           <a href="/" className="brand-link">Colton Santiago</a>
         </div>
+
+        <div id="subheader-slot" className="subheader-slot" />
 
         {/* Desktop Nav */}
         <nav className="site-nav">
