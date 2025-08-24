@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
 import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase";
-import PasswordInput from "../components/PasswordInput";
+import PasswordInput from "../auth/PasswordInput";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");

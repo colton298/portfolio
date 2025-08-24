@@ -1,8 +1,8 @@
 // src/components/schedule/Timeline.tsx
 import { useEffect, useMemo, useState } from "react";
-import DayTimeline from "../../components/DayTimeline";
-import WeekTimeline from "../../components/WeekTimeline";
-import MonthCalendar from "../../components/MonthCalendar";
+import DayTimeline from "./DayTimeline";
+import WeekTimeline from "./WeekTimeline";
+import MonthCalendar from "./MonthCalendar";
 import { ViewMode } from "./ScheduleHeader";
 
 type DayItem = { id: string; text: string; done: boolean; time?: string | null; start?: string | null; end?: string | null; };

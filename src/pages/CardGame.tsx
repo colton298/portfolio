@@ -189,6 +189,7 @@ export default function CardGame() {
         <li>Picking up a card makes that card your currently held card.</li>
         <li>If you cannot play, you can deal from the stock, but only a limited number of times.</li>
       </ul>
+      <p>Note: This game is much easier to play on large screens, rather than on mobile.</p>
       <p style={{ marginTop: "0.75rem" }}>
         Tip: playable cards are highlighted. Click × to start.
       </p>

@@ -1,13 +1,12 @@
-// src/pages/TodoPage.tsx
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "../auth/AuthProvider";
-import { Todo, watchTodos } from "../services/todos";
-import { useDocumentTheme } from "../hooks/useDocumentTheme";
-import type { ViewMode } from "../components/schedule/ScheduleHeader";
+import { Todo, watchTodos } from "../components/todos/todos";
+import { useDocumentTheme } from "../components/todos/useDocumentTheme";
+import type { ViewMode } from "../components/todos/ScheduleHeader";
 
-import ScheduleHeader from "../components/schedule/ScheduleHeader";
-import Timeline from "../components/schedule/Timeline";
+import ScheduleHeader from "../components/todos/ScheduleHeader";
+import Timeline from "../components/todos/Timeline";
 import AddTodoForm from "../components/todos/AddTodoForm";
 import TodoFilters, { FilterMode } from "../components/todos/TodoFilters";
 import TodoList from "../components/todos/TodoList";
@@ -22,7 +21,7 @@ import {
   firstOfMonthISO,
   lastOfMonthISO,
   daySort,
-} from "../utils/date";
+} from "../components/todos/date";
 
 type DayItem = {
   id: string;
@@ -139,7 +138,6 @@ export default function TodoPage() {
       <FirstVisitNotice storageKey="todo-welcome-v1">
         Welcome to my To-Do List! Use the left panel to add a task, the right panel to view tasks each day, and the top panel for a daily, weekly, or monthly timeline!
         Tasks can be set to a specific time, time range, or left to simply occur on a day. 
-        Note: This project is much easier to use on large screens, rather than on mobile. 
       </FirstVisitNotice>
 
 

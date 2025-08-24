@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { ComponentType } from "react";
-import { Todo, toggleTodo, removeTodo, updateTodo } from "../../services/todos";
+import { Todo, toggleTodo, removeTodo, updateTodo } from "./todos";
 import { FilterMode } from "./TodoFilters";
-import { formatDatePretty, formatMonthPretty, startOfWeekISO, formatRange } from "../../utils/date";
+import { formatDatePretty, formatMonthPretty, startOfWeekISO, formatRange } from "./date";
 
 
 type Props = {

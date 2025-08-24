@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { createTodo } from "../../services/todos";
-import { isValidRange } from "../../utils/date";
+import { createTodo } from "./todos";
+import { isValidRange } from "./date";
 
 type Props = {
   uid: string;

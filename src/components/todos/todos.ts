@@ -11,7 +11,7 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 
 /** A task. Times are "HH:MM" 24h format; date is "YYYY-MM-DD". */
 export type Todo = {

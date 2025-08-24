@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase";
-import PasswordInput from "../components/PasswordInput";
+import PasswordInput from "../auth/PasswordInput";
 
 export default function Login() {
   const navigate = useNavigate();

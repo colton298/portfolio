@@ -1,5 +1,5 @@
 // src/utils/date.ts
-import { Todo } from "../services/todos";
+import { Todo } from "./todos";
 
 /* ---------------------- date helpers ---------------------- */
 export function toISODate(d: Date) {

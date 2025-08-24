@@ -4,7 +4,7 @@ import {
   formatDatePretty,
   formatMonthPretty,
   startOfWeekISO,
-} from "../../utils/date";
+} from "./date";
 
 export type ViewMode = "day" | "week" | "month";
 
