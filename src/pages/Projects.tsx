@@ -133,6 +133,14 @@ export default function Projects() {
           aria-labelledby="class-tab"
           hidden={!isClass}
         >
+          <h2>Senior Design</h2>
+          <h3>Project Manager - LabScity</h3>
+          <p>Developing a website for scientists and researchers to connect. Core features include:</p>
+          <ul>
+            <li>Posts, sorted by genre and your interests, to show areas of research most relevant to you</li>
+            <li>A project group system where researchers can connect to help better communicate</li>
+            <li>Automated moderation to ensure conversations stay science-oriented</li>
+          </ul>
           <h2>
             COP4331 (Processes for Object Oriented Software Development) - Project Manager
           </h2>
@@ -178,14 +186,7 @@ export default function Projects() {
               allowFullScreen
               title="Digital Wellness Slides"
             />
-          <h2>Senior Design</h2>
-          <h3>Project Manager - LabScity</h3>
-          <p>Developing a website for scientists and researchers to connect. Core features include:</p>
-          <ul>
-            <li>Posts, sorted by genre and your interests, to show areas of research most relevant to you</li>
-            <li>A project group system where researchers can connect to help better communicate</li>
-            <li>Automated moderation to ensure conversations stay science-oriented</li>
-          </ul>
+          
           <h2>AI for Game Programming</h2>
           <h3>Developer</h3>
           <p>Creating a 2D roguelike with unique progression and objectives. This game features a specialized algorithm that creates weapons based on the current environment and character preference.</p>
