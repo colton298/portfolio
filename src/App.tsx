@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 
@@ -15,16 +15,19 @@ import TodoPage from "./pages/TodoPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import CardGame from "./components/cardgame";
 import SignOut from "./auth/SignOut";
+import PlayStarSurvivors from "./pages/PlayStarSurvivors";
 
 import { AuthProvider } from "./auth/AuthProvider";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 //Routes
 export default function App() {
+  const location = useLocation();
+  const isUnityPage = location.pathname === "/PlayStarSurvivors";
   return (
     <HelmetProvider>
       <Header />
-      <main className="container">
+      <main className={isUnityPage ? "fullbleed-unity" : "container"}>
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -32,6 +35,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/wordle" element={<Wordle />} />
+            <Route path="/PlayStarSurvivors" element={<PlayStarSurvivors />} />
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

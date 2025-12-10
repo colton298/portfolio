@@ -141,6 +141,19 @@ export default function Projects() {
             <li>A project group system where researchers can connect to help better communicate</li>
             <li>Automated moderation to ensure conversations stay science-oriented</li>
           </ul>
+
+          <h2>AI for Game Programming</h2>
+          <h3>Developer</h3>
+          <p>Worked with a team of 5 to develop a roguelike with special AI elements. My personal contributions to the game include:</p>
+          <ul>
+            <li>Levels</li>
+            <li>Objectives</li>
+            <li>Characters</li>
+            <li>XP System</li>
+          </ul>
+          <p>The game can be played online (or downloaded) below:</p>
+          <Link to="/PlayStarSurvivors" className="button">Try it Here</Link>
+          
           <h2>
             COP4331 (Processes for Object Oriented Software Development) - Project Manager
           </h2>
@@ -187,9 +200,7 @@ export default function Projects() {
               title="Digital Wellness Slides"
             />
           
-          <h2>AI for Game Programming</h2>
-          <h3>Developer</h3>
-          <p>Creating a 2D roguelike with unique progression and objectives. This game features a specialized algorithm that creates weapons based on the current environment and character preference.</p>
+          
           </div>
         </div>
       </div>
