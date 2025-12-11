@@ -100,20 +100,20 @@ export default function Projects() {
           <h2>Wordle Solver</h2>
           <p>
             I love playing Wordle with my friends and family, and have done so for my years.
-            So, I created a Wordle solver using JavaScript and CSS. This can accurately solve
+            So, I created a Wordle solver using JavaScript. This can accurately solve
             any Wordle, using the words from the real game!
           </p>
           <Link to="/wordle" className="button">Try it Here</Link>
 
           <h2>This Website!</h2>
           <p>
-            I coded this project from scratch, using React. Check out my code using the
+            I coded this project from scratch, using React and TypeScript. Check out my code using the
             github link:
           </p>
           <p>
             GitHub:{" "}
             <a
-              href="https://github.com/colton298/newportfolio"
+              href="https://github.com/colton298/portfolio"
               target="_blank"
               rel="noreferrer"
             >
@@ -144,7 +144,7 @@ export default function Projects() {
 
           <h2>AI for Game Programming</h2>
           <h3>Developer</h3>
-          <p>Worked with a team of 5 to develop a roguelike with special AI elements. My personal contributions to the game include:</p>
+          <p>Worked with a team of 4 to develop a roguelike with special AI elements. My personal contributions to the game include:</p>
           <ul>
             <li>Levels</li>
             <li>Objectives</li>
@@ -153,9 +153,41 @@ export default function Projects() {
           </ul>
           <p>The game can be played online (or downloaded) below:</p>
           <Link to="/PlayStarSurvivors" className="button">Try it Here</Link>
+
+          <h2>Database Systems</h2>
+          <h3>Developer</h3>
+          <p>Worked with a team of 3 to develop a prototype web app for food donations. This project uses PHP and SQL. I personally developed:</p>
+          <ul>
+            <li>Database Schema</li>
+            <li>Sign-Up/Sign-In Pages</li>
+            <li>Home, Edit Profile, Restaurant Pages</li>
+            <li>Project Aesthetic</li>
+          </ul>
+          <p>The project's code can be viewed at</p>
+          <p>
+            GitHub:{" "}
+            <a
+              href="https://github.com/colton298/DatabaseProject"
+              target="_blank"
+              rel="noreferrer"
+            >
+              https://github.com/colton298/DatabaseProject
+            </a>
+          </p>
+          <h4>A look at my pages:</h4>
+          <div className="slides-embed">
+            <iframe
+              src="https://docs.google.com/presentation/d/e/2PACX-1vRtlBKVdT2DLwQInIM2wCcGUQ5wLGlKEVd1X3yA_yvMoxAVgAokm5mw6KnFKY0fEU0sZSkx1NZao6az/pubembed?start=false&loop=false&delayms=3000"
+              width="100%"
+              height="300"
+              style={{ border: "none" }}
+              allowFullScreen
+              title="Database Systems Slides"
+            />
+          </div>
           
           <h2>
-            COP4331 (Processes for Object Oriented Software Development) - Project Manager
+            Processes for Object Oriented Software Development - Project Manager
           </h2>
           <p>In this course, I oversaw the completion of two projects.</p>
 

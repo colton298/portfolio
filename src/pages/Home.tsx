@@ -31,9 +31,10 @@ export default function Home() {
       />
       <h2>About Me</h2>
       <p>I am a senior undergrad computer science student at UCF. I love programming and finding simple ways to solve complex problems. </p>
-      <p>At UCF, I was a part of the EXCEL program, which allowed me to access exclusive education systems and volunteer work. From EXCEL, I found multiple volunteer oppurtunities, including STEM Day, where I helped new students discover the STEM facilities at UCF. </p>
       <p>I have a passion for helping other discover the magic of computer science and programming, which led me to hold a fundraiser for the Codecraft Foundation in 2022 for my senior project.</p>
       <p>I've developed my programming skills through my high school and college education, which led me to achieve an 80% on the August 2024 UCF Computer Science Foundation Exam, where the average was a 51%.</p>
+      <p>I have taken part in several class projects which have allowed me to take on developer and leadership positions, providing a full view of project development.</p>
+      <p>View my other pages through the navigation bar above to see my projects, resume, and more.</p>
     </div>
   );
 }
