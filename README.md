@@ -1,5 +1,1 @@
-My Portfolio!
-
-This is Colton Santiago's portfolio code. 
-View the website at coltonsantiago.com 
-
+This is Colton Santiago's portfolio website. Built using React/Next.js 
