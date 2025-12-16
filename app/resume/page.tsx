@@ -1,34 +1,29 @@
-//Resume page
-export const metadata = 
-{
+export const metadata = {
   title: "Resume | Colton Santiago",
 };
 
-export default function Resume() 
-{
+export default function ResumePage() {
   return (
-    <main className="relative flex flex-col min-h-screen">
-      
-      {/*Resume Embed*/}
+    <main className="min-h-screen flex flex-col items-center p-6">
       <iframe
-        src="/assets/resume.pdf"
-        title="Colton Santiago Resume"
-        className="flex-1 w-full border-0 bg-white"
+        src="/assets/Resume.pdf"
+        className="w-full max-w-5xl h-[90vh] border rounded"
       />
 
-      {/*Resume Actions*/}
-      <div className="fixed left-1/2 -translate-x-1/2 bottom-4 z-20 flex flex-col gap-2 rounded-lg border border-white/10 bg-black/60 backdrop-blur px-4 py-2">
+      <div className="mt-4 flex gap-4">
         <a
-          href="/assets/resume.pdf"
+          href="/assets/Resume.pdf"
           download
-          className="text-sm text-center hover:text-white"
+          className="px-4 py-2 bg-gray-800 text-white rounded"
         >
           Download PDF
         </a>
+
         <a
-          href="/assets/resume.pdf"
+          href="/assets/Resume.pdf"
           target="_blank"
-          className="text-sm text-center hover:text-white"
+          rel="noopener noreferrer"
+          className="px-4 py-2 bg-gray-800 text-white rounded"
         >
           Open in new tab
         </a>
