@@ -64,6 +64,15 @@ export const projects: Project[] = [
         }
     },
     {
+        title: "PDF Reader", role: "Developer", date: "Fall 2025", technologies: "Typescript",
+        description: "A PDF reader with some quality of life features I built to help me study.",
+        action : {
+            type: "link",
+            label: "Try it here",
+            href: "/projects/PDFReader"
+        } 
+    },
+    {
         title: "Wordle Solver", role: "Developer", date: "Summer 2025", technologies: "Typescript",
         description: "I play Wordle almost every day with my family, so I decided to make a solver hosted on this website. Unlike other solvers, this takes into account the placement of yellow letters to determine possible answers.",
         action : {
