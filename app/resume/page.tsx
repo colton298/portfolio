@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Resume | Colton Santiago",
+  title: "Colton Santiago - Resume",
 };
 
 export default function ResumePage() {
