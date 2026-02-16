@@ -10,6 +10,14 @@ export type ProjectAction =
       label: string;
       href: string;
       external?: boolean;
+    }
+  | {
+      type: "both";
+      src: string;
+      height?: number;
+      label: string;
+      href: string;
+      external?: boolean;
     };
 
 
@@ -25,7 +33,15 @@ export type Project = {
 export const projects: Project[] = [
     {
         title: "Senior Design - LabScity", role: "Project Manager", date: "Fall 2025, Spring 2026", technologies: "Next.js, Supabase, Vercel",
-        description: "Developing a social media website designed to help scientists and researchers collaborate." 
+        description: "Developing a social media website designed to help scientists and researchers collaborate.",
+        action: {
+            type: "both",
+            src: "https://docs.google.com/presentation/d/e/2PACX-1vTLy6bh4Ag_aVAentpLrba7Hlni0oAtC_LLTqM2FdjhPQptgMg4Pqg3MsXxZjkm1L3I68tWkenJqLaX/pubembed?start=false&loop=false&delayms=3000",
+            height: 300,
+            label: "Visit LabScity",
+            href: "https://labscity.org",
+            external: true,
+        }
     },
     {
         title: "AI for Game Programming - Star Survivors", role: "Developer", date: "Fall 2025", technologies: "Unity, C#",
