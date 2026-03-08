@@ -23,6 +23,12 @@ export type ProjectAction =
       external?: boolean;
     };
 
+export type ProjectMedia = {
+  type: "image";
+  src: string;
+  alt: string;
+};
+
 
 export type Project = {
   title: string;
@@ -32,6 +38,7 @@ export type Project = {
   technologies: string;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
   action?: ProjectAction;
+  media?: ProjectMedia;
 };
 
 export const projects: Project[] = [
@@ -54,6 +61,11 @@ export const projects: Project[] = [
             type: "link",
             label: "Play or download it here",
             href: "/projects/StarSurvivors"
+        },
+        media: {
+            type: "image",
+            src: "assets/star-survivors-preview.png",
+            alt: "The main menu for Star Survivors."
         }  
     },
     {
@@ -90,6 +102,11 @@ export const projects: Project[] = [
             type: "link",
             label: "Try it here",
             href: "/projects/wordle"
+        },
+        media: {
+            type: "image",
+            src: "assets/wordle-image.png",
+            alt: "Wordle"
         } 
     },
     {
