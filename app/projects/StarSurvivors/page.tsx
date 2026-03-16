@@ -1,7 +1,7 @@
 import StarSurvivorsClient from "./StarSurvivorsClient";
 
 export const metadata = {
-  title: "Colton Santiago - Star Survivors",
+  title: "CS - Star Survivors",
 };
 
 export default function StarSurvivorsPage() {

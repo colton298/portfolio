@@ -14,6 +14,8 @@ export default function ProjectItem({
   const Icon = project.icon;
   const hasEmbed = action?.type === "iframe" || action?.type === "both";
   const hasLink = action?.type === "link" || action?.type === "both";
+  const hasSecondaryLink =
+    hasLink && Boolean(action?.secondaryLabel && action?.secondaryHref);
   const hasImage = media?.type === "image";
   const hasMedia = hasEmbed || hasImage;
   const isLeftAligned = index % 2 === 0;
@@ -51,24 +53,44 @@ export default function ProjectItem({
         <p>{project.description}</p>
 
         {hasLink && action && (
-          <div>
+          <div className="mt-2 flex flex-wrap gap-3">
             {action.external ? (
               <a
                 href={action.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-2 rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
+                className="rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
               >
                 {action.label}
               </a>
             ) : (
               <Link
                 href={action.href}
-                className="inline-block mt-2 rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
+                className="rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
               >
                 {action.label}
               </Link>
             )}
+
+            {hasSecondaryLink ? (
+              action.secondaryExternal ? (
+                <a
+                  href={action.secondaryHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
+                >
+                  {action.secondaryLabel}
+                </a>
+              ) : (
+                <Link
+                  href={action.secondaryHref!}
+                  className="rounded-md border border-white/20 px-4 py-2 text-sm transition hover:bg-white/10"
+                >
+                  {action.secondaryLabel}
+                </Link>
+              )
+            ) : null}
           </div>
         )}
       </div>

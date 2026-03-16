@@ -2,7 +2,7 @@
 import WordleClient from "./WordleClient";
 
 export const metadata = {
-  title: "Colton Santiago - Wordle Solver",
+  title: "CS - Wordle Solver",
 };
 
 export default function WordlePage() {

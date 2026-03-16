@@ -13,6 +13,9 @@ export type ProjectAction =
       label: string;
       href: string;
       external?: boolean;
+      secondaryLabel?: string;
+      secondaryHref?: string;
+      secondaryExternal?: boolean;
     }
   | {
       type: "both";
@@ -21,6 +24,9 @@ export type ProjectAction =
       label: string;
       href: string;
       external?: boolean;
+      secondaryLabel?: string;
+      secondaryHref?: string;
+      secondaryExternal?: boolean;
     };
 
 export type ProjectMedia = {
@@ -52,6 +58,8 @@ export const projects: Project[] = [
             label: "Visit LabScity",
             href: "https://labscity.org",
             external: true,
+            secondaryLabel: "About LabScity",
+            secondaryHref: "/projects/LabScity",
         }
     },
     {

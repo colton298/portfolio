@@ -3,7 +3,7 @@ import { projects } from "./projects";
 import ProjectItem from "./ProjectItem";
 
 export const metadata = {
-  title: "Projects | Colton Santiago",
+  title: "Colton Santiago - Projects",
 };
 
 export default function Projects() {

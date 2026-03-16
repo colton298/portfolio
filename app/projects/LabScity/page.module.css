@@ -1,0 +1,62 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: #d8e0e8;
+  color: #07386a;
+  font-family: Inter, var(--font-open-sans), system-ui, sans-serif;
+}
+
+.stack {
+  width: min(42rem, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.card {
+  width: 100%;
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(7, 56, 106, 0.12);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  color: #07386a;
+  font-size: clamp(1.875rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.bodyText {
+  margin: 0;
+  color: #2a3a47;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.listItem {
+  padding: 0.9rem 1rem;
+  border-radius: 0.75rem;
+  background: #eff4f6;
+  color: #07386a;
+  font-weight: 600;
+  line-height: 1.45;
+}
