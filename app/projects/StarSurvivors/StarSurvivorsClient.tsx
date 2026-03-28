@@ -1,102 +1,124 @@
 "use client";
 
+import Particles from "./Particles";
 import "./starsurvivors.css";
 
 export default function StarSurvivorsClient() {
   return (
-    <>
-      {/* GAME EMBED */}
-      <section className="unity-embed">
-        <iframe
-          src="/StarSurvivors/index.html"
-          className="unity-frame"
-          allow="fullscreen"
-          title="Star Survivors"
-        />
-      </section>
+    <div className="star-survivors-page">
+      <Particles
+        className="star-survivors-particles"
+        particleColors={["#ffffff"]}
+        particleCount={200}
+        particleSpread={10}
+        speed={0.1}
+        particleBaseSize={100}
+        moveParticlesOnHover
+        alphaParticles={false}
+        disableRotation={false}
+        pixelRatio={1}
+      />
 
-      {/* GAME INFO */}
-      <section className="game-info">
-        <h1 className="text-3xl font-semibold mb-2">Star Survivors</h1>
+      <div className="star-survivors-content">
+        <section className="unity-embed">
+          <iframe
+            src="/StarSurvivors/index.html"
+            className="unity-frame"
+            allow="fullscreen"
+            title="Star Survivors"
+          />
+        </section>
 
-        <p>
-          Star Survivors is a roguelike similar to Vampire Survivors featuring
-          weapons that are generated at runtime based on the current level and
-          character. Objectives must be completed to progress. After all
-          objectives are completed, the player can return to their ship to
-          complete a level.
-        </p>
+        <section className="game-info-section">
+          <div className="game-info">
+            <h1 className="text-3xl font-semibold mb-2">Star Survivors</h1>
 
-        <a
-          href="/StarSurvivorsWindows.zip"
-          download
-          className="download-btn"
-        >
-          Download Star Survivors (Windows)
-        </a>
+            <p>
+              Star Survivors is a roguelike similar to Vampire Survivors
+              featuring weapons that are generated at runtime based on the
+              current level and character. Objectives must be completed to
+              progress. After all objectives are completed, the player can
+              return to their ship to complete a level.
+            </p>
 
-        <h3 className="text-3xl font-semibold mb-2">Credits</h3>
+            <a
+              href="/StarSurvivorsWindows.zip"
+              download
+              className="download-btn"
+            >
+              Download Star Survivors (Windows)
+            </a>
 
-        <ul className="credits-list">
-          <li><strong>Colton Santiago</strong> – Levels, Objectives, Characters, XP System</li>
-          <li><strong>Connor Hatfield</strong> – Genetic Algorithm (Weapons), Project Manager</li>
-          <li><strong>Micah Ramirez</strong> – UI, Music</li>
-          <li><strong>Anthony Vega</strong> – Enemies</li>
+            <h3 className="text-3xl font-semibold mb-2">Credits</h3>
 
-          <p className="credits-note">
-            All in-game art was taken from free sources, credited below:
-          </p>
-
-          <details>
-            <summary><strong>Level Design</strong></summary>
-            <ul>
-              <li>Spaceship – guardian5.itch.io</li>
-              <li>Mars Background – vecteezy.com</li>
-              <li>Neptune Background – vecteezy.com</li>
-              <li>Payload Sprite – silverink.itch.io</li>
-              <li>Crystal Sprite – creativekind.itch.io</li>
-              <li>Jungle Assets – blank-canvas.itch.io</li>
+            <ul className="credits-list">
+              <li>
+                <strong>Colton Santiago</strong> - Levels, Objectives,
+                Characters, XP System
+              </li>
+              <li>
+                <strong>Connor Hatfield</strong> - Genetic Algorithm (Weapons),
+                Project Manager
+              </li>
+              <li><strong>Micah Ramirez</strong> - UI, Music</li>
+              <li><strong>Anthony Vega</strong> - Enemies</li>
             </ul>
-          </details>
 
-          <details>
-            <summary><strong>Enemies</strong></summary>
-            <ul>
-              <li>Slime – rvros.itch.io</li>
-              <li>Skeleton – monopixelart.itch.io</li>
-              <li>Golems – monopixelart.itch.io</li>
-              <li>Mushroom – monopixelart.itch.io</li>
-            </ul>
-          </details>
+            <p className="credits-note">
+              All in-game art was taken from free sources, credited below:
+            </p>
 
-          <details>
-            <summary><strong>Characters</strong></summary>
-            <ul>
-              <li>Astronaut – floatingkites.itch.io</li>
-              <li>Ninja – cyberrumor.itch.io</li>
-              <li>Knight – cyberrumor.itch.io</li>
-            </ul>
-          </details>
+            <details>
+              <summary><strong>Level Design</strong></summary>
+              <ul>
+                <li>Spaceship - guardian5.itch.io</li>
+                <li>Mars Background - vecteezy.com</li>
+                <li>Neptune Background - vecteezy.com</li>
+                <li>Payload Sprite - silverink.itch.io</li>
+                <li>Crystal Sprite - creativekind.itch.io</li>
+                <li>Jungle Assets - blank-canvas.itch.io</li>
+              </ul>
+            </details>
 
-          <details>
-            <summary><strong>Weapons</strong></summary>
-            <ul>
-              <li>Guns – ranitaya-studios.itch.io</li>
-              <li>Melee – ranitaya-studios.itch.io</li>
-            </ul>
-          </details>
+            <details>
+              <summary><strong>Enemies</strong></summary>
+              <ul>
+                <li>Slime - rvros.itch.io</li>
+                <li>Skeleton - monopixelart.itch.io</li>
+                <li>Golems - monopixelart.itch.io</li>
+                <li>Mushroom - monopixelart.itch.io</li>
+              </ul>
+            </details>
 
-          <details>
-            <summary><strong>Sound Effects</strong></summary>
-            <ul>
-              <li>Game Over – freesound.org</li>
-              <li>UI – jdsherbert.itch.io</li>
-              <li>Objective – YouTube</li>
-              <li>SFX Generator – sfxr.me</li>
-            </ul>
-          </details>
-        </ul>
-      </section>
-    </>
+            <details>
+              <summary><strong>Characters</strong></summary>
+              <ul>
+                <li>Astronaut - floatingkites.itch.io</li>
+                <li>Ninja - cyberrumor.itch.io</li>
+                <li>Knight - cyberrumor.itch.io</li>
+              </ul>
+            </details>
+
+            <details>
+              <summary><strong>Weapons</strong></summary>
+              <ul>
+                <li>Guns - ranitaya-studios.itch.io</li>
+                <li>Melee - ranitaya-studios.itch.io</li>
+              </ul>
+            </details>
+
+            <details>
+              <summary><strong>Sound Effects</strong></summary>
+              <ul>
+                <li>Game Over - freesound.org</li>
+                <li>UI - jdsherbert.itch.io</li>
+                <li>Objective - YouTube</li>
+                <li>SFX Generator - sfxr.me</li>
+              </ul>
+            </details>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }
