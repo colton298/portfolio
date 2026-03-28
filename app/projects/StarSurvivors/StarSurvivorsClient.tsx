@@ -15,7 +15,7 @@ export default function StarSurvivorsClient() {
         particleBaseSize={100}
         moveParticlesOnHover
         alphaParticles={false}
-        disableRotation={false}
+        disableRotation={true}
         pixelRatio={1}
       />
 
