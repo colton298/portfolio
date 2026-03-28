@@ -41,16 +41,16 @@ function resolveSteamId64(steamId: string) {
 
   const steam2Match = trimmedId.match(/^STEAM_\d:([0-1]):(\d+)$/i);
   if (steam2Match) {
-    const universeOffset = 76561197960265728n;
+    const universeOffset = BigInt("76561197960265728");
     const accountParity = BigInt(steam2Match[1]);
     const accountNumber = BigInt(steam2Match[2]);
 
-    return (universeOffset + accountNumber * 2n + accountParity).toString();
+    return (universeOffset + accountNumber * BigInt(2) + accountParity).toString();
   }
 
   const steam3Match = trimmedId.match(/^\[U:1:(\d+)\]$/i);
   if (steam3Match) {
-    const universeOffset = 76561197960265728n;
+    const universeOffset = BigInt("76561197960265728");
     const accountId = BigInt(steam3Match[1]);
 
     return (universeOffset + accountId).toString();
