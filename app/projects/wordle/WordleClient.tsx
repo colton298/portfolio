@@ -51,7 +51,19 @@ export default function WordleClient() {
     (row: "green" | "yellow", i: number) =>
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       const refs = row === "green" ? greenRefs.current : yellowRefs.current;
-      if (e.key === "Backspace" && i > 0) refs[i - 1]?.focus();
+      const values = row === "green" ? greens : yellows;
+
+      if (e.key === "Backspace" && !values[i] && i > 0) {
+        e.preventDefault();
+
+        if (row === "green") {
+          setGreens((prev) => prev.map((c, k) => (k === i - 1 ? "" : c)));
+        } else {
+          setYellows((prev) => prev.map((c, k) => (k === i - 1 ? "" : c)));
+        }
+
+        refs[i - 1]?.focus();
+      }
       if (e.key === "Enter") setShowResults(true);
     };
 
@@ -112,6 +124,10 @@ export default function WordleClient() {
         <input
           className="box gray long"
           placeholder="Incorrect letters"
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
           value={grays.toUpperCase()}
           onChange={(e) => setGrays(e.target.value.toLowerCase())}
         />
