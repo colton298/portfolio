@@ -41,7 +41,7 @@ function getSpotifyBasicAuthHeader(clientId: string, clientSecret: string) {
   return Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 }
 
-async function getSpotifyAccessToken() {
+const getSpotifyAccessToken = cache(async () => {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
@@ -62,7 +62,7 @@ async function getSpotifyAccessToken() {
         grant_type: "refresh_token",
         refresh_token: refreshToken,
       }),
-      cache: "no-store",
+      cache: "force-cache",
     });
 
     if (!response.ok) {
@@ -83,7 +83,7 @@ async function getSpotifyAccessToken() {
     console.error("Spotify token refresh threw an error.", error);
     return { accessToken: null, status: "api_error" as const };
   }
-}
+});
 
 export async function getRecentlyPlayedSongs(limit = 3): Promise<RecentlyPlayedSongsResult> {
   const tokenResult = await getSpotifyAccessToken();
@@ -129,3 +129,4 @@ export async function getRecentlyPlayedSongs(limit = 3): Promise<RecentlyPlayedS
     return { songs: [], status: "api_error" };
   }
 }
+import { cache } from "react";
