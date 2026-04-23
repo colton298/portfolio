@@ -1,4 +1,5 @@
 import "./globals.css";
+import ActivityTicker from "@/components/ActivityTicker";
 import Navbar from "@/components/Navbar";
 import { Open_Sans } from "next/font/google";
 
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.variable}>
       <body>
+        <ActivityTicker />
         <Navbar />
         {children}
       </body>

@@ -15,3 +15,44 @@ body
   font-family: var(--font-open-sans), system-ui, sans-serif;
 }
 
+.ticker-shell {
+  backdrop-filter: blur(10px);
+}
+
+.ticker-track {
+  overflow: hidden;
+}
+
+.ticker-content {
+  display: flex;
+  width: max-content;
+  padding: 0.75rem 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(229, 229, 229, 0.88);
+  animation: ticker-scroll 38s linear infinite;
+}
+
+.ticker-item {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.ticker-separator {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  color: rgba(229, 229, 229, 0.45);
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-100% / 2));
+  }
+}
+
