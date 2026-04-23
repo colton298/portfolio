@@ -47,6 +47,7 @@ async function getSpotifyAccessToken() {
   const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
 
   if (!clientId || !clientSecret || !refreshToken) {
+    console.error("Spotify build config is missing one or more required environment variables.");
     return { accessToken: null, status: "missing_config" as const };
   }
 
@@ -65,17 +66,21 @@ async function getSpotifyAccessToken() {
     });
 
     if (!response.ok) {
+      const errorBody = await response.text();
+      console.error(`Spotify token refresh failed with status ${response.status}: ${errorBody}`);
       return { accessToken: null, status: "api_error" as const };
     }
 
     const data = (await response.json()) as { access_token?: string };
 
     if (!data.access_token) {
+      console.error("Spotify token refresh succeeded but no access token was returned.");
       return { accessToken: null, status: "api_error" as const };
     }
 
     return { accessToken: data.access_token, status: "ok" as const };
-  } catch {
+  } catch (error) {
+    console.error("Spotify token refresh threw an error.", error);
     return { accessToken: null, status: "api_error" as const };
   }
 }
@@ -101,6 +106,8 @@ export async function getRecentlyPlayedSongs(limit = 3): Promise<RecentlyPlayedS
     });
 
     if (!response.ok) {
+      const errorBody = await response.text();
+      console.error(`Spotify top tracks request failed with status ${response.status}: ${errorBody}`);
       return { songs: [], status: "api_error" };
     }
 
@@ -117,7 +124,8 @@ export async function getRecentlyPlayedSongs(limit = 3): Promise<RecentlyPlayedS
       })),
       status: "ok",
     };
-  } catch {
+  } catch (error) {
+    console.error("Spotify top tracks request threw an error.", error);
     return { songs: [], status: "api_error" };
   }
 }
