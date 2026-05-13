@@ -13,10 +13,10 @@ export default async function Home()
 
         <div className = "flex justify-center">
           <Image 
-            src="/assets/headshot.jpeg"
-            alt="Colton Santiago headshot"
-            width = {200}
-            height = {200}
+            src="/assets/GradPicCrop.jpeg"
+            alt="Me on the UCF seal"
+            width = {300}
+            height = {300}
             />
         </div>
         
