@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Contact | Colton Santiago",
+  title: "Colton Santiago - Contact",
 };
 
 export default function Contact() {
