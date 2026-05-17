@@ -14,6 +14,9 @@ export default function Navbar()
         <Link href="/resume" className="hover:text-white transition">
           Resume
         </Link>
+        <Link href="/contact" className="hover:text-white transition">
+          Contact
+        </Link>
       </nav>
     </header>
   );
