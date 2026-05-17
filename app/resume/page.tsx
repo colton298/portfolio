@@ -7,6 +7,8 @@ export default function ResumePage() {
     <main className="min-h-screen flex flex-col items-center p-6">
       <iframe
         src="/assets/Resume.pdf"
+        title="Colton Santiago resume PDF"
+        loading="lazy"
         className="w-full max-w-5xl h-[90vh] border rounded"
       />
 

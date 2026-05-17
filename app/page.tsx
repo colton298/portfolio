@@ -13,10 +13,11 @@ export default async function Home()
 
         <div className = "flex justify-center">
           <Image 
-            src="/assets/GradPicCrop.jpeg"
+            src="/assets/GradPicCrop-600.jpg"
             alt="Me on the UCF seal"
             width = {300}
             height = {300}
+            priority
             />
         </div>
         
@@ -39,7 +40,7 @@ export default async function Home()
         </p>
 
         <p>
-          View my other pages through the navigation bar above to see my projects, resume, and more.
+          View my other pages through the navigation bar above to see my experience, resume, and more.
         </p>
       </section>
     </main>

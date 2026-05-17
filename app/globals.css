@@ -46,6 +46,30 @@ body
   color: rgba(229, 229, 229, 0.45);
 }
 
+.credly-badge-shell {
+  height: 9.25rem;
+  max-width: 14rem;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.credly-badge-scale {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  width: 400px;
+  height: 275px;
+  transform: translate(-50%, -50%) scale(0.52);
+  transform-origin: center;
+}
+
+.slides-embed-frame {
+  aspect-ratio: 960 / 569;
+  overflow: hidden;
+  width: 100%;
+}
+
 @keyframes ticker-scroll {
   0% {
     transform: translateX(0);

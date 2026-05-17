@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "activity:generate": "node scripts/generate-activity.mjs",
     "start": "next start",
     "lint": "eslint"
   },

@@ -1,0 +1,19 @@
+{
+  "updatedAt": "2026-05-17T05:17:47.469Z",
+  "steam": {
+    "status": "ok",
+    "games": [
+      "The Elder Scrolls V: Skyrim Special Edition",
+      "Far Far West",
+      "Fallout: New Vegas"
+    ]
+  },
+  "spotify": {
+    "status": "ok",
+    "songs": [
+      "Chop Suey! - System Of A Down",
+      "No One There - Kevin Sherwood, Vicky Psarakis, Sicksense",
+      "The Reason - Hoobastank"
+    ]
+  }
+}

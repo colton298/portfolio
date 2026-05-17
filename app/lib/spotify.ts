@@ -62,7 +62,7 @@ const getSpotifyAccessToken = cache(async () => {
         grant_type: "refresh_token",
         refresh_token: refreshToken,
       }),
-      cache: "force-cache",
+      next: { revalidate: 3300 },
     });
 
     if (!response.ok) {

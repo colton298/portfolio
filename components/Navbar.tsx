@@ -4,12 +4,12 @@ export default function Navbar()
 {
   return (
     <header className="w-full border-b border-white/10">
-      <nav className="max-w-5xl mx-auto flex justify-center gap-12 py-8 text-sm">
+      <nav className="mx-auto flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-3 px-4 py-8 text-sm sm:gap-x-12">
         <Link href="/" className="hover:text-white transition">
           Home
         </Link>
-        <Link href="/projects" className="hover:text-white transition">
-          Projects
+        <Link href="/experience" className="hover:text-white transition">
+          Experience
         </Link>
         <Link href="/resume" className="hover:text-white transition">
           Resume

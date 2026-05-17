@@ -1,50 +1,85 @@
-import { MESSAGE_OF_THE_DAY } from "@/app/lib/site-config";
-import { getRecentlyPlayedSongs } from "@/app/lib/spotify";
-import { getRecentlyPlayedGames } from "@/app/lib/steam";
+"use client";
 
-function buildTickerItems(games: string[], songs: string[], messageOfTheDay?: string) {
+import { MESSAGE_OF_THE_DAY } from "@/app/lib/site-config";
+import { useEffect, useMemo, useState } from "react";
+
+type ActivityPayload = {
+  steam?: {
+    games?: string[];
+  };
+  spotify?: {
+    songs?: string[];
+  };
+};
+
+function buildTickerItems(
+  messageOfTheDay?: string,
+  activity?: ActivityPayload | null
+) {
   const items: string[] = [];
 
+  const games = activity?.steam?.games ?? [];
+  const songs = activity?.spotify?.songs ?? [];
+
   if (games.length > 0) {
-    items.push(`STEAM RECENT: ${games.join(", ")}`);
-  } else {
-    items.push("STEAM RECENT UNAVAILABLE");
+    items.push(`RECENTLY PLAYED ON STEAM: ${games.join(", ")}`);
   }
 
   if (songs.length > 0) {
-    items.push(`SPOTIFY TOP TRACKS: ${songs.join(", ")}`);
-  } else {
-    items.push("SPOTIFY TOP TRACKS UNAVAILABLE");
+    items.push(`RECENTLY PLAYED ON SPOTIFY: ${songs.join(", ")}`);
   }
 
   if (messageOfTheDay?.trim()) {
     items.push(`MOTD: ${messageOfTheDay.trim()}`);
   }
 
+
   return items;
 }
 
-export default async function ActivityTicker() {
-  const [recentGamesResult, recentSongsResult] = await Promise.all([
-    getRecentlyPlayedGames(3),
-    getRecentlyPlayedSongs(3),
-  ]);
+export default function ActivityTicker() {
+  const [activity, setActivity] = useState<ActivityPayload | null>(null);
 
-  const recentGames = recentGamesResult.games.map((game) => game.name);
-  const recentSongs = recentSongsResult.songs.map(
-    (song) => `${song.name} - ${song.artistNames.join(", ")}`
-  );
-  const tickerItems = buildTickerItems(
-    recentGames,
-    recentSongs,
-    MESSAGE_OF_THE_DAY
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadActivity() {
+      try {
+        const response = await fetch(`/activity.json?ts=${Date.now()}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        setActivity((await response.json()) as ActivityPayload);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("Activity ticker request failed.", error);
+        }
+      }
+    }
+
+    loadActivity();
+    const intervalId = window.setInterval(loadActivity, 15 * 60 * 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+      controller.abort();
+    };
+  }, []);
+
+  const tickerItems = useMemo(
+    () => buildTickerItems(MESSAGE_OF_THE_DAY, activity),
+    [activity]
   );
   const repeatedItems = [...tickerItems, ...tickerItems];
 
   return (
     <div className="ticker-shell border-b border-white/10 bg-black/40">
       <div className="ticker-track">
-        <div className="ticker-content" aria-label="Recent Steam and Spotify activity">
+        <div className="ticker-content" aria-label="Site activity">
           {repeatedItems.map((item, index) => (
             <span
               key={`${item}-${index}`}
