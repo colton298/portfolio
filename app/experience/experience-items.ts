@@ -48,26 +48,6 @@ export const experienceItems: ExperienceItem[] = [
     },
   },
   {
-    title: "AI for Game Programming - Star Survivors",
-    completed: "Fall 2025",
-    description:
-      "Built a Unity roguelike with a four-person team, including AI-driven gameplay systems and a playable web build.",
-    tags: ["Unity", "C#", "Game AI", "Team Project"],
-    media: {
-      type: "link",
-      label: "Play or download here",
-      href: "/projects/StarSurvivors",
-      external: false,
-    },
-  },
-  {
-    title: "Database Systems - Waste Not Kitchen",
-    completed: "Fall 2025",
-    description:
-      "Developed a prototype charity platform for food donations with a small team for a database systems course.",
-    tags: ["SQL", "PHP", "Databases", ],
-  },
-  {
     title: "Topics in CyberSecurity - AWS Certification",
     completed: "Spring 2026",
     description:
@@ -88,6 +68,26 @@ export const experienceItems: ExperienceItem[] = [
     description:
       "Gained experience in multiple programming languages, earning an A in the course.",
     tags: ["C++", "JavaScript", "Python", "Haskell"],
+  },
+  {
+    title: "AI for Game Programming - Star Survivors",
+    completed: "Fall 2025",
+    description:
+      "Built a Unity roguelike with a four-person team, including AI-driven gameplay systems and a playable web build.",
+    tags: ["Unity", "C#", "Game AI", "Team Project"],
+    media: {
+      type: "link",
+      label: "Play or download here",
+      href: "/projects/StarSurvivors",
+      external: false,
+    },
+  },
+  {
+    title: "Database Systems - Waste Not Kitchen",
+    completed: "Fall 2025",
+    description:
+      "Developed a prototype charity platform for food donations with a small team for a database systems course.",
+    tags: ["SQL", "PHP", "Databases", ],
   },
   {
     title: "Wordle Solver",
@@ -129,19 +129,6 @@ export const experienceItems: ExperienceItem[] = [
     },
   },
   {
-    title: "Portfolio Website",
-    completed: "Active",
-    description:
-      "This website!",
-    tags: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    media: {
-      type: "link",
-      label: "View source code",
-      href: "https://www.github.com/colton298/portfolio",
-      external: true,
-    },
-  },
-  {
     title: "UCF Computer Science Foundation Exam",
     completed: "August 2024",
     description:
@@ -154,5 +141,18 @@ export const experienceItems: ExperienceItem[] = [
     description:
       "My high school senior project. A fundraiser focused on helping others discover computer science and programming.",
     tags: ["Programming Education", "Fundraising"],
+  },
+  {
+    title: "Portfolio Website",
+    completed: "Active",
+    description:
+      "This website!",
+    tags: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    media: {
+      type: "link",
+      label: "View source code",
+      href: "https://www.github.com/colton298/portfolio",
+      external: true,
+    },
   },
 ];
