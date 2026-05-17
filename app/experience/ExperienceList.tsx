@@ -80,9 +80,16 @@ export default function ExperienceList({ items }: { items: ExperienceItem[] }) {
 
 function ExperienceCard({ item }: { item: ExperienceItem }) {
   const media = item.media;
+  const hasSlideEmbed = media?.type === "iframe";
 
   return (
-    <article className="grid gap-5 rounded-lg border border-white/12 bg-[#1d1b20] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.24)] transition hover:border-white/24 hover:bg-[#242229] md:grid-cols-[1fr_auto] md:p-6">
+    <article
+      className={`grid w-full min-w-0 gap-5 overflow-hidden rounded-lg border border-white/12 bg-[#1d1b20] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.24)] transition hover:border-white/24 hover:bg-[#242229] md:p-6 ${
+        hasSlideEmbed
+          ? "md:grid-cols-[minmax(0,1fr)_minmax(20rem,34rem)]"
+          : "md:grid-cols-[minmax(0,1fr)_auto]"
+      }`}
+    >
       <div className="min-w-0 space-y-4">
         <div className="space-y-2">
           <h2 className="text-xl font-semibold leading-tight">{item.title}</h2>
@@ -110,10 +117,10 @@ function ExperienceCard({ item }: { item: ExperienceItem }) {
         <div
           className={
             media.type === "iframe"
-              ? "md:w-[32rem] lg:w-[34rem]"
+              ? "w-full min-w-0 justify-self-end"
               : media.type === "credly"
-                ? "md:w-56"
-                : "md:w-56"
+                ? "w-full min-w-0 md:w-56"
+                : "w-full min-w-0 md:w-56"
           }
         >
           {media.type === "image" ? (

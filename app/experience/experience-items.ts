@@ -97,7 +97,7 @@ export const experienceItems: ExperienceItem[] = [
     tags: ["TypeScript", "Algorithms", "Next.js", "Word Games"],
     media: {
       type: "link",
-      label: "Play or download here",
+      label: "Use it here",
       href: "/projects/wordle",
       external: false,
     },
