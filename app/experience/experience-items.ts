@@ -38,8 +38,8 @@ export const experienceItems: ExperienceItem[] = [
     title: "Senior Design - LabScity",
     completed: "Fall 2025 - Spring 2026",
     description:
-      "Project-managed a senior design team building a collaboration platform for scientists and researchers.",
-    tags: ["Next.js", "Supabase", "Vercel", "Project Management"],
+      "Led a senior design team building a social media platform from scratch for scientists and researchers.",
+    tags: ["Next.js", "Supabase", "Vercel", "Leadership Position"],
     media: {
       type: "iframe",
       src: "https://docs.google.com/presentation/d/e/2PACX-1vTLy6bh4Ag_aVAentpLrba7Hlni0oAtC_LLTqM2FdjhPQptgMg4Pqg3MsXxZjkm1L3I68tWkenJqLaX/pubembed?start=false&loop=false&delayms=3000",
@@ -87,14 +87,14 @@ export const experienceItems: ExperienceItem[] = [
     completed: "Fall 2025",
     description:
       "Developed a prototype charity platform for food donations with a small team for a database systems course.",
-    tags: ["SQL", "PHP", "Databases", ],
+    tags: ["SQL", "PHP", "Databases"],
   },
   {
     title: "Wordle Solver",
     completed: "Summer 2025",
     description:
       "Created a TypeScript solver that filters possible answers while accounting for exact placement rules and yellow-letter constraints.",
-    tags: ["TypeScript", "Algorithms", "Next.js", "Word Games"],
+    tags: ["TypeScript", "Algorithms", "Next.js"],
     media: {
       type: "link",
       label: "Use it here",

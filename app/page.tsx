@@ -24,17 +24,21 @@ export default async function Home()
         <h2 className="text-3xl font-semibold">About Me</h2>
 
         <p>
-          I am a senior undergrad computer science student at UCF. I love programming and finding simple ways to solve complex problems.
+          I am a recent graduate from UCF with a Bachelor's in Computer Science. I love programming and finding simple ways to solve complex problems.
         </p>
 
         <p>
-          I have a passion for helping others discover the magic of computer science and programming, which led me to hold a fundraiser for the Codecraft Foundation in 2022 for my senior project.
+          For my senior project, I took on a project manager role for a team developing a social media website centered around scientific conversations. We built this website, LabScity, from the ground up in one semester.
         </p>
 
         <p>
           I&apos;ve developed my programming skills through my high school and college education, achieving an 80% on the August 2024 UCF Computer Science Foundation Exam (average was 51%).
         </p>
 
+        <p>
+          I have a passion for helping others discover the magic of computer science and programming, which led me to hold a fundraiser for the Codecraft Foundation in 2022 for my senior project.
+        </p>
+        
         <p>
           I have taken part in several class projects in developer and leadership roles, gaining a full view of project development.
         </p>
