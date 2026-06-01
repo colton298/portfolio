@@ -180,6 +180,14 @@ function MediaLink({
   const className =
     "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/18 px-4 text-sm font-semibold transition hover:bg-white/10";
 
+  if (media.download) {
+    return (
+      <a href={media.href} download className={className}>
+        {media.label}
+      </a>
+    );
+  }
+
   if (media.external) {
     return (
       <a

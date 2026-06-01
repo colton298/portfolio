@@ -9,6 +9,7 @@ export type ExperienceMedia =
       label: string;
       href: string;
       external?: boolean;
+      download?: boolean;
     }
   | {
       type: "iframe";
@@ -45,6 +46,20 @@ export const experienceItems: ExperienceItem[] = [
       src: "https://docs.google.com/presentation/d/e/2PACX-1vTLy6bh4Ag_aVAentpLrba7Hlni0oAtC_LLTqM2FdjhPQptgMg4Pqg3MsXxZjkm1L3I68tWkenJqLaX/pubembed?start=false&loop=false&delayms=3000",
       title: "LabScity presentation",
       height: 260,
+    },
+  },
+  {
+    title: "CursorLocker",
+    completed: "Summer 2026",
+    description:
+      "While playing some games, like Skyrim or Fallout, I noticed sometimes my other monitors would scroll while playing. I decided to make an easy tool to fix that with this project,  a small .Net program that allows users to prevent their cursor from leaving fullscreen windows.",
+    tags: [".Net", "C#", "Developer", "Windows"],
+    media: {
+      type: "link",
+      label: "Download it here",
+      href: "/assets/CursorLocker.exe",
+      external: false,
+      download: true,
     },
   },
   {
